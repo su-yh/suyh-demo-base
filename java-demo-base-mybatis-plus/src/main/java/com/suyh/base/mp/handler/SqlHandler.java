@@ -37,8 +37,9 @@ import java.util.regex.Pattern;
 })
 @Slf4j
 public class SqlHandler implements Interceptor {
+    public static boolean AUDIT_SQL_ENABLED = false;
+    // 审计日志SQL 列表收集，需要注意初始化和释放
     public static final ThreadLocal<List<String>> AUDIT_SQL_LIST = new ThreadLocal<>();
-    public static boolean LOG_STATUS = true;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -94,14 +95,11 @@ public class SqlHandler implements Interceptor {
                 }
 
                 String sqlDetail = preparedStatement.toString();
-                if (LOG_STATUS)
-                {
-                    log.info("Executed SQL Database product: {}, URL: {}, sql: \n{}",
-                            metaData.getDatabaseProductName(), extractHost(metaData.getURL()), sqlDetail);
-                }
+                log.info("Executed SQL Database product: {}, URL: {}, sql: \n{}",
+                        metaData.getDatabaseProductName(), extractHost(metaData.getURL()), sqlDetail);
 
                 String name = invocation.getMethod().getName();
-                if (name.equalsIgnoreCase("update")) {
+                if (AUDIT_SQL_ENABLED && name.equalsIgnoreCase("update")) {
                     List<String> sqlList = SqlHandler.AUDIT_SQL_LIST.get();
                     if (sqlList != null) {
                         sqlList.add(sqlDetail);
