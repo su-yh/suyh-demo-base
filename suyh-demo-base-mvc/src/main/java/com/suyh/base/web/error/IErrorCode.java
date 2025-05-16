@@ -1,4 +1,4 @@
-package com.suyh.base.web.constants.ec;
+package com.suyh.base.web.error;
 
 /**
  * @author suyh

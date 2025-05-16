@@ -7,9 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author suyh
  * @since 2025-05-16
  */
-@ConfigurationProperties(prefix = BaseMvcProperties.PREFIX)
+@ConfigurationProperties(prefix = BaseWebProperties.PREFIX)
 @Data
-public class BaseMvcProperties {
+public class BaseWebProperties {
     public static final String PREFIX = "base.web";
 
     private boolean enabled = true;

@@ -1,7 +1,6 @@
 package com.suyh.base.web.error;
 
-import com.suyh.base.web.constants.ec.IErrorCode;
-import com.suyh.base.web.constants.enums.BaseMvcErrorCodeEnums;
+import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.AbstractBusinessException;
 import com.suyh.base.web.exception.ExceptionCategory;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.context.MessageSource;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
@@ -34,7 +32,6 @@ import java.util.Map;
  * 以前的code 现在已经不用了
  * 现在的status 与HttpStatus 一致
  */
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class BaseErrorAttributes extends DefaultErrorAttributes {
@@ -54,7 +51,7 @@ public class BaseErrorAttributes extends DefaultErrorAttributes {
         Throwable throwable = getError(webRequest);
 
         if (throwable != null) {
-            IErrorCode ec = BaseMvcErrorCodeEnums.SERVICE_ERROR;
+            IErrorCode ec = BaseWebErrorCodeEnums.SERVICE_ERROR;
             Object[] params = null;
             if (AbstractBusinessException.class.isAssignableFrom(throwable.getClass())) {
                 AbstractBusinessException exception = (AbstractBusinessException) throwable;
@@ -63,7 +60,7 @@ public class BaseErrorAttributes extends DefaultErrorAttributes {
                     // 系统异常，打印堆栈信息。
                     log.warn("system exception, timestamp: {}", timestampFormat, throwable);
                 }
-                if (exception.getEc() == BaseMvcErrorCodeEnums.SERVICE_ERROR) {
+                if (exception.getEc() == BaseWebErrorCodeEnums.SERVICE_ERROR) {
                     // 当前环境没有使用系统异常和业务异常，这里就判断对应的ID 做处理打印堆栈信息。
                     log.warn("service exception, timestamp: {}", timestampFormat, throwable);
                 }
@@ -71,7 +68,7 @@ public class BaseErrorAttributes extends DefaultErrorAttributes {
                 ec = exception.getEc();
                 params = exception.getParams();
             } else if (AccessDeniedException.class.isAssignableFrom(throwable.getClass())) {
-                ec = BaseMvcErrorCodeEnums.ACCESS_DENIED;
+                ec = BaseWebErrorCodeEnums.ACCESS_DENIED;
             }
 
             String messageSourceCode = IErrorCode.ERROR_CODE_PREFIX + "." + ec;

@@ -4,7 +4,6 @@ import com.suyh.base.web.authentication.LoginUserArgumentResolver;
 import com.suyh.base.web.authentication.interceptor.AbstractAuthenticationInterceptor;
 import com.suyh.base.web.error.BaseHandlerExceptionResolver;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
 import javax.annotation.Resource;
 import java.util.List;
 
-@Component
 public class BaseWebMvcConfigurer implements WebMvcConfigurer {
     @Resource
     private AbstractAuthenticationInterceptor loginInterceptor;

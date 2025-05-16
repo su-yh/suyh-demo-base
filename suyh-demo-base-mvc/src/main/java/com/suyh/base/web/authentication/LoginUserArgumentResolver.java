@@ -1,7 +1,8 @@
 package com.suyh.base.web.authentication;
 
-import com.suyh.base.web.constants.BaseMvcConstants;
-import com.suyh.base.web.constants.enums.BaseMvcErrorCodeEnums;
+import com.suyh.base.web.authentication.annotation.CurrUser;
+import com.suyh.base.web.constants.BaseWebConstants;
+import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
 import com.suyh.base.web.user.AbstractLoginUser;
 import org.springframework.core.MethodParameter;
@@ -40,12 +41,12 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         // 获取到拦截器放到属性中的user 对象
         assert request != null;
 
-        Object currUser = request.getAttribute(BaseMvcConstants.LOGIN_USER_ATTRIBUTE_KEY);
+        Object currUser = request.getAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY);
         if (currUser == null) {    // 用户未登录
             CurrUser ann = parameter.getParameterAnnotation(CurrUser.class);
             assert ann != null;
             if (ann.required()) {    // 用户必须登录
-                throw ExceptionUtil.business(BaseMvcErrorCodeEnums.USER_NOT_LOGIN);
+                throw ExceptionUtil.business(BaseWebErrorCodeEnums.USER_NOT_LOGIN);
             }
         }
 

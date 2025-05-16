@@ -1,4 +1,6 @@
-package com.suyh.base.web.authentication;
+package com.suyh.base.web.authentication.annotation;
+
+import com.suyh.base.web.authentication.LoginUserArgumentResolver;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

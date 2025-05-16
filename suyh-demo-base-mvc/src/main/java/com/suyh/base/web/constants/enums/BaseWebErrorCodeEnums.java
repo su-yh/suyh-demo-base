@@ -1,12 +1,14 @@
 package com.suyh.base.web.constants.enums;
 
-import com.suyh.base.web.constants.ec.IErrorCode;
+import com.suyh.base.web.error.IErrorCode;
 
 /**
+ * 错误码枚举
+ *
  * @author suyh
  * @since 2025-05-16
  */
-public enum BaseMvcErrorCodeEnums implements IErrorCode {
+public enum BaseWebErrorCodeEnums implements IErrorCode {
     USER_NOT_LOGIN(1015005, "未登录"),
     SERVICE_ERROR(1015000, "服务错误"),
     ACCESS_DENIED(1014403, "禁止访问"),
@@ -17,7 +19,7 @@ public enum BaseMvcErrorCodeEnums implements IErrorCode {
     private final int code;
     private final String msg;
 
-    BaseMvcErrorCodeEnums(int code, String msg) {
+    BaseWebErrorCodeEnums(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

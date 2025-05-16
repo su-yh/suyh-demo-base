@@ -1,6 +1,6 @@
 package com.suyh.base.web.exception;
 
-import com.suyh.base.web.constants.ec.IErrorCode;
+import com.suyh.base.web.error.IErrorCode;
 
 public class ExceptionUtil {
 

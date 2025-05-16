@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
 
 /**
+ * 处理http 请求参数 String 类型的前后空白字符
+ *
  * @author suyh
  * @since 2024-09-13
  */

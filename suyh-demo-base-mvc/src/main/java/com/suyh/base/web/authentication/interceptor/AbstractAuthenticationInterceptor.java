@@ -1,8 +1,8 @@
 package com.suyh.base.web.authentication.interceptor;
 
 import com.suyh.base.web.authentication.annotation.Permit;
-import com.suyh.base.web.constants.BaseMvcConstants;
-import com.suyh.base.web.constants.enums.BaseMvcErrorCodeEnums;
+import com.suyh.base.web.constants.BaseWebConstants;
+import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -62,7 +62,7 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
             ModelAndView modelAndView) throws Exception {
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 
-        request.removeAttribute(BaseMvcConstants.LOGIN_USER_ATTRIBUTE_KEY);
+        request.removeAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY);
     }
 
     // 认证
@@ -72,7 +72,7 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
 
         // 正常登录
         if (loginUser != null) {
-            request.setAttribute(BaseMvcConstants.LOGIN_USER_ATTRIBUTE_KEY, loginUser);
+            request.setAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY, loginUser);
             UsernamePasswordAuthenticationToken authenticationToken
                     = new UsernamePasswordAuthenticationToken(loginUser, null, null);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -95,7 +95,7 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
             return;
         }
 
-        throw ExceptionUtil.business(BaseMvcErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
+        throw ExceptionUtil.business(BaseWebErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
     }
 
     @Nullable
