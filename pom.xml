@@ -16,6 +16,7 @@
     </properties>
 
     <modules>
+        <module>suyh-demo-base-dynamic-datasource</module>
         <module>suyh-demo-base-mybatis-plus</module>
     </modules>
 
