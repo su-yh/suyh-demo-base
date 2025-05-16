@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
  * 
  * @author ruoyi
  */
-//@MapperScan(basePackages = {"com.suyh0201.business.mapper", "com.suyh0201.sys.mapper"})
 @EnableConfigurationProperties(BaseMybatisPlusProperties.class)
 @AutoConfiguration
 public class SuyhMybatisPlusAutoConfiguration {
