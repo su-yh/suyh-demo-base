@@ -17,7 +17,7 @@
 
     <modules>
         <module>suyh-demo-base-dynamic-datasource</module>
-        <module>suyh-demo-base-mvc</module>
+        <module>suyh-demo-base-web</module>
         <module>suyh-demo-base-mybatis-plus</module>
     </modules>
 
