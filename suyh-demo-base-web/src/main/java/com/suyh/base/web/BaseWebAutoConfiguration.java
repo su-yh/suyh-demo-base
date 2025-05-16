@@ -4,6 +4,7 @@ import com.suyh.base.web.advice.StringTrimmerControllerAdvice;
 import com.suyh.base.web.configurer.BaseWebMvcConfigurer;
 import com.suyh.base.web.error.BaseErrorAttributes;
 import com.suyh.base.web.properties.BaseWebProperties;
+import com.suyh.base.web.runner.ErrorCodeValidationRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,5 +32,10 @@ public class BaseWebAutoConfiguration {
     @Bean
     public BaseErrorAttributes baseErrorAttributes(MessageSource messageSource) {
         return new BaseErrorAttributes(messageSource);
+    }
+
+    @Bean
+    public ErrorCodeValidationRunner errorCodeValidationRunner() {
+        return new ErrorCodeValidationRunner();
     }
 }

@@ -3,7 +3,13 @@ package com.suyh.base.web.exception;
 import com.suyh.base.web.error.IErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author suyh
@@ -11,8 +17,13 @@ import org.springframework.lang.NonNull;
  */
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public abstract class AbstractBusinessException extends RuntimeException {
     private static final long serialVersionUID = -4365987799788427525L;
+
+    // 这里使用map 主要是懒得处理并发问题
+    private static final Map<Class<? extends IErrorCode>, Integer> CLASS_MAP = new ConcurrentHashMap<>();
+    private static final Set<Integer> CODE_SET = new HashSet<>();
 
     private final IErrorCode ec;
 
@@ -30,5 +41,31 @@ public abstract class AbstractBusinessException extends RuntimeException {
         this.params = params;
         // 这个是使用log4j 来解析 {} 的方法，注释掉，但不要删除，免得找不到了。
         // String message = org.slf4j.helpers.MessageFormatter.arrayFormat(errorCode.getMsg(), params).getMessage();
+
+        // 校验是否有重复的，以及是否非枚举类型
+        Class<? extends IErrorCode> cls = ec.getClass();
+        if (!cls.isEnum()) {
+            log.warn("NO ENUM Class: {}", cls.getName());
+        }
+
+//        CLASS_MAP.computeIfAbsent(cls, c -> {
+//            if (!c.isEnum()) {
+//                log.warn("NO ENUM Class: {}", c.getName());
+//                return 0;
+//            }
+//
+//            // 获取枚举的所有实例（返回 Object[]）
+//            IErrorCode[] enumConstants = c.getEnumConstants();
+//            for (IErrorCode errorCode : enumConstants) {
+//                // 如果枚举实现了特定接口，可以进一步转换
+//
+//                // FIXME: suyh - 并发问题，暂时不管
+//                if (!CODE_SET.add(errorCode.getCode())) {
+//                    log.error("CODE DUPLICATION: {}", errorCode.getCode());
+//                }
+//            }
+//
+//            return 0;
+//        });
     }
 }
