@@ -16,7 +16,7 @@
     </properties>
 
     <modules>
-        <module>java-demo-base-mybatis-plus</module>
+        <module>suyh-demo-base-mybatis-plus</module>
     </modules>
 
 
