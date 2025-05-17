@@ -15,6 +15,7 @@ import java.util.Map;
  */
 @Slf4j
 public final class TokenUtils {
+    // TODO: suyh - 需要由业务调用方控制
     private static final String secret = "5bZ2x8D9p4K7QfJ3mN6Lg0C1hR5sT7uV9W";
 
     public static final String NICK_NAME_KEY = "nickname";

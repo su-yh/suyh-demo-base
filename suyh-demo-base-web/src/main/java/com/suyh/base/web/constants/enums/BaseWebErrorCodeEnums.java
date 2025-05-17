@@ -1,7 +1,6 @@
 package com.suyh.base.web.constants.enums;
 
 import com.suyh.base.web.error.IErrorCode;
-import lombok.Getter;
 
 /**
  * 错误码枚举
@@ -18,7 +17,6 @@ public enum BaseWebErrorCodeEnums implements IErrorCode {
     ;
 
     private final int code;
-    @Getter
     private final String msg;
 
     BaseWebErrorCodeEnums(int code, String msg) {
@@ -31,4 +29,8 @@ public enum BaseWebErrorCodeEnums implements IErrorCode {
         return code;
     }
 
+    @Override
+    public String getMsg() {
+        return msg;
+    }
 }

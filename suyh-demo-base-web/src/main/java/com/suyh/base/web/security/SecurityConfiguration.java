@@ -10,7 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * @author suyh
  * @since 2024-09-14
  */
-@Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 

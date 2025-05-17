@@ -7,6 +7,7 @@ import com.suyh.base.web.properties.BaseWebProperties;
 import com.suyh.base.web.response.WrapperResponseBodyAdvice;
 import com.suyh.base.web.response.WrapperResponseScanPackages;
 import com.suyh.base.web.runner.ErrorCodeDuplicationValidationRunner;
+import com.suyh.base.web.security.SecurityConfiguration;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -56,5 +57,10 @@ public class BaseWebAutoConfiguration {
         }
 
         return advice;
+    }
+
+    @Bean
+    public SecurityConfiguration securityConfiguration() {
+        return new SecurityConfiguration();
     }
 }
