@@ -23,10 +23,9 @@ import java.util.Set;
  * 这个是处理统一的返回值的，将所有的返回值都封装到一个公共的模板({@link R})中，
  * 这样在Controller 的接口中可以直接返回实际的返回值对象，在不需要有返回值的情况也可以直接添加void 作为返回值。
  */
-//@ControllerAdvice
 @RequiredArgsConstructor
 public class WrapperResponseBodyAdvice implements ResponseBodyAdvice<Object> {
-    private final Set<String> basePackages = new HashSet<>();
+    private static final Set<String> BASE_PACKAGES = new HashSet<>();
 
     public void addBasePackages(Collection<String> basePackages) {
         if (basePackages == null) {
@@ -35,7 +34,7 @@ public class WrapperResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
         for (String basePackage : basePackages) {
             if (StringUtils.hasText(basePackage)) {
-                this.basePackages.add(basePackage);
+                WrapperResponseBodyAdvice.BASE_PACKAGES.add(basePackage);
             }
         }
     }
@@ -44,21 +43,7 @@ public class WrapperResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     public boolean supports(@NonNull MethodParameter returnType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         Class<?> containingClass = returnType.getContainingClass();
         WrapperResponseAdvice wrapperResponseAdvice = returnType.getMethodAnnotation(WrapperResponseAdvice.class);
-
-        // 只对指定包路径下的返回值类型进行自动封装
-        boolean flag = false;
-        for (String basePackage : basePackages) {
-            if (containingClass.getPackage().getName().startsWith(basePackage)) {
-                flag = true;
-                break;
-            }
-        }
-
-        if (!flag) {
-            return false;
-        }
-
-        return WrapperResponseBodyAdvice.supportsWrapper(returnType.getParameterType(), wrapperResponseAdvice);
+        return WrapperResponseBodyAdvice.supportsWrapper(containingClass, returnType.getParameterType(), wrapperResponseAdvice);
     }
 
     @Override
@@ -85,8 +70,21 @@ public class WrapperResponseBodyAdvice implements ResponseBodyAdvice<Object> {
      * @param wrapperResponseAdvice 方法注解
      * @return true: 支持，false: 禁止
      */
-    private static boolean supportsWrapper(
-            Class<?> returnClass, WrapperResponseAdvice wrapperResponseAdvice) {
+    public static boolean supportsWrapper(
+            Class<?> containingClass, Class<?> returnClass, WrapperResponseAdvice wrapperResponseAdvice) {
+
+        // 只对指定包路径下的返回值类型进行自动封装
+        boolean flag = false;
+        for (String basePackage : BASE_PACKAGES) {
+            if (containingClass.getPackage().getName().startsWith(basePackage)) {
+                flag = true;
+                break;
+            }
+        }
+
+        if (!flag) {
+            return false;
+        }
 
         if (returnClass != null) {
             if (ResponseEntity.class.isAssignableFrom(returnClass)) {

@@ -85,32 +85,28 @@ public class SysUserController {
 //    /**
 //     * 新增用户
 //     */
-////    @PreAuthorize("@ss.hasPermi('system:user:add')")
-////    @Log(title = "用户管理", businessType = BusinessType.INSERT)
 //    @AuditOperation("@audit.auditRecord(" +
 //            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_USER_CREATE, " +
 //            "#spelReturnValue, #request, #loginUser, " +
 //            "#user)")
 //    @PostMapping()
+//    @WrapperResponseAdvice(enabled = false)
 //    public AjaxResult add(
 //            @SuppressWarnings("unused") HttpServletRequest request,
-//            @SuppressWarnings("unused")  @Parameter(hidden = true) @CurrLoginUser LoginUser loginUser,
-//            @Validated @RequestBody SysUser user)
-//    {
-////        deptService.checkDeptDataScope(user.getDeptId());
-////        roleService.checkRoleDataScope(user.getRoleIds());
-//        if (!userService.checkUserNameUnique(user)) {
-//            throw ExceptionUtil.business(ErrorCodeConstants.RUOYI_SYSTEM_USER_CREATE_USERNAME_EXISTS, user.getUsername());
+//            @SuppressWarnings("unused")  @Parameter(hidden = true) @CurrUser LoginUser loginUser,
+//            @Validated @RequestBody SysUser user) {
+//        if (!sysUserService.checkUserNameUnique(user)) {
+//            throw ExceptionUtil.business(SysWebErrorCodeEnums.RUOYI_SYSTEM_USER_CREATE_USERNAME_EXISTS, user.getUsername());
 //        }
-//        if (RuoyiStringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
-//            throw ExceptionUtil.business(ErrorCodeConstants.RUOYI_SYSTEM_USER_CREATE_PHONE_NUMBER_EXISTS, user.getUsername());
+//        if (RuoyiStringUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
+//            throw ExceptionUtil.business(SysWebErrorCodeEnums.RUOYI_SYSTEM_USER_CREATE_PHONE_NUMBER_EXISTS, user.getUsername());
 //        }
-//        if (RuoyiStringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
-//            throw ExceptionUtil.business(ErrorCodeConstants.RUOYI_SYSTEM_USER_CREATE_EMAIL_EXISTS, user.getUsername());
+//        if (RuoyiStringUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
+//            throw ExceptionUtil.business(SysWebErrorCodeEnums.RUOYI_SYSTEM_USER_CREATE_EMAIL_EXISTS, user.getUsername());
 //        }
 //
-//        userService.insertUser(user);
-//        return success();
+//        sysUserService.insertUser(user);
+//        return AjaxResult.success();
 //    }
 //
 //    /**

@@ -9,6 +9,7 @@ import com.suyh.base.web.error.IErrorCode;
  * @since 2025-05-16
  */
 public enum BaseWebErrorCodeEnums implements IErrorCode {
+    NO_IMPLEMENT(1014001, "功能代码还未实现"),
     USER_NOT_LOGIN(1015005, "未登录"),
     SERVICE_ERROR(1015000, "服务错误"),
     ACCESS_DENIED(1014403, "禁止访问"),

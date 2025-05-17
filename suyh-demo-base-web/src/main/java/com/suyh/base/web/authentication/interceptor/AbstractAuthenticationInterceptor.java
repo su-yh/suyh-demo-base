@@ -27,6 +27,7 @@ import java.util.List;
 public abstract class AbstractAuthenticationInterceptor implements HandlerInterceptor {
     protected final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
+    // TODO: suyh - 需要添加一个扩展，支持业务添加忽略认证的接口配置
     /**
      * 对于非业务API 接口忽略认证的API 配置
      * 如果是业务相关的API 接口忽略认证使用注解{@link Permit}
