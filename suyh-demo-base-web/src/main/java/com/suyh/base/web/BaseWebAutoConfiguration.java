@@ -11,6 +11,7 @@ import com.suyh.base.web.security.SecurityConfiguration;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +24,7 @@ import java.util.Collection;
  */
 @ConditionalOnProperty(prefix = BaseWebProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(BaseWebProperties.class)
-@AutoConfiguration
+@AutoConfiguration(before = ErrorMvcAutoConfiguration.class)
 public class BaseWebAutoConfiguration {
     @Bean
     public StringTrimmerControllerAdvice stringTrimmerControllerAdvice() {

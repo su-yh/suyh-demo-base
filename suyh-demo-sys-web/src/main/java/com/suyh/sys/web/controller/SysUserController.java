@@ -1,5 +1,6 @@
 package com.suyh.sys.web.controller;
 
+import com.suyh.base.web.authentication.annotation.Permit;
 import com.suyh.sys.web.mybatis.entity.SysUserEntity;
 import com.suyh.sys.web.service.SysUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +28,8 @@ public class SysUserController {
     @Resource
     private SysUserService sysUserService;
 
+    // TODO: suyh - 测试用的
+    @Permit(required = false)
     @GetMapping("/queryById")
     public SysUserEntity queryById(@RequestParam("id") Long id) {
         return sysUserService.obtainUserById(id);
