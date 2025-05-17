@@ -16,7 +16,7 @@ import java.util.Map;
  * @since 2025-05-16
  */
 @Slf4j
-public class ErrorCodeValidationRunner implements ApplicationRunner {
+public class ErrorCodeDuplicationValidationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // <code, className>
@@ -50,5 +50,7 @@ public class ErrorCodeValidationRunner implements ApplicationRunner {
                 errorCodeMap.put(errorCode.getCode(), className);
             }
         }
+
+        log.info("error code duplication value scan pass.");
     }
 }
