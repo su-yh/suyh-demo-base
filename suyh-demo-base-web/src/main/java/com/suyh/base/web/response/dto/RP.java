@@ -1,4 +1,4 @@
-package com.suyh.base.web.rsp;
+package com.suyh.base.web.response.dto;
 
 import lombok.Getter;
 

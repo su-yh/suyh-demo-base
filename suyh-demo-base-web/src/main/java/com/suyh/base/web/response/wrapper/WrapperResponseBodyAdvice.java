@@ -1,7 +1,7 @@
-package com.suyh.base.web.response;
+package com.suyh.base.web.response.wrapper;
 
 import com.suyh.base.web.response.annotation.WrapperResponseAdvice;
-import com.suyh.base.web.rsp.R;
+import com.suyh.base.web.response.dto.R;
 import com.suyh.base.web.util.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

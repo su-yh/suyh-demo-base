@@ -1,4 +1,4 @@
-package com.suyh.base.web.response;
+package com.suyh.base.web.response.wrapper;
 
 import java.util.Collection;
 
