@@ -13,10 +13,12 @@ import org.springframework.context.annotation.Bean;
  * 
  * @author ruoyi
  */
+@ConditionalOnProperty(prefix = BaseMybatisPlusProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(BaseMybatisPlusProperties.class)
 @AutoConfiguration
 public class SuyhMybatisPlusAutoConfiguration {
-    @ConditionalOnProperty(prefix = BaseMybatisPlusProperties.PREFIX, name = "sql-handler.enabled", havingValue = "true", matchIfMissing = true)
+
+    @ConditionalOnProperty(prefix = BaseMybatisPlusProperties.PREFIX, name = "sql.enabled", havingValue = "true", matchIfMissing = true)
     @Bean
     public SqlHandler sqlHandler() {
         return new SqlHandler();

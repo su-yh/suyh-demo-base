@@ -7,6 +7,10 @@ package com.suyh.base.web.error;
 public interface IErrorCode {
     String ERROR_CODE_PREFIX = "error.code";
 
+    /**
+     * 留给系统的错误码范围：[0, 1000_000)
+     * 业务相关的错误码范围：[1000_000, +∞)
+     */
     int getCode();
     String getMsg();
 }
