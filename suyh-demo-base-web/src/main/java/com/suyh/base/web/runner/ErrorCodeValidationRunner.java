@@ -6,7 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
+ * 错误码枚举的校验
+ *
  * @author suyh
  * @since 2025-05-16
  */
@@ -14,31 +19,35 @@ import org.springframework.boot.ApplicationRunner;
 public class ErrorCodeValidationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        // TODO: suyh - 检查所有的枚举是否有重复的地方
+        // <code, className>
+        Map<Integer, String> errorCodeMap = new HashMap<>();
+
         ErrorCodeLoader loader = ErrorCodeLoader.load(IErrorCode.class, null);
         for (String className : loader) {
-            System.out.println("name: " + className);
-
             Class<?> clazz = Class.forName(className);
+            if (!clazz.isEnum()) {
+                log.error("{} is not an Enum class", className);
+                throw new RuntimeException(className + " is not an Enum class");
+            }
 
-            // 检查是否为枚举
-            if (clazz.isEnum()) {
-                System.out.println(className + " 是一个枚举类");
+            if (!IErrorCode.class.isAssignableFrom(clazz)) {
+                log.error("{} is not implement {}", className, IErrorCode.class.getName());
+                throw new RuntimeException(className + " is not implement " + IErrorCode.class.getName());
+            }
 
-                // 获取枚举的所有实例
-                Object[] enumConstants = clazz.getEnumConstants();
-                for (Object constant : enumConstants) {
-                    Enum<?> enumConstant = (Enum<?>) constant;
-                    System.out.println("枚举常量: " + enumConstant.name());
+            log.info("ErrorCode: {}", className);
 
-                    // 如果枚举实现了特定接口，可以进一步转换
-                    if (constant instanceof IErrorCode) {
-                        IErrorCode errorCode = (IErrorCode) constant;
-                        System.out.println("错误码: " + errorCode.getCode());
-                    }
+            // 获取枚举的所有实例
+            Object[] enumConstants = clazz.getEnumConstants();
+            for (Object constant : enumConstants) {
+                IErrorCode errorCode = (IErrorCode) constant;
+                String historyClassName = errorCodeMap.get(errorCode.getCode());
+                if (historyClassName != null) {
+                    log.error("duplication code: {}, {} and {}", errorCode.getCode(), className, historyClassName);
+                    throw new RuntimeException("");
                 }
-            } else {
-                System.out.println(className + " 不是枚举类");
+
+                errorCodeMap.put(errorCode.getCode(), className);
             }
         }
     }
