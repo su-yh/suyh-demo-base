@@ -11,20 +11,34 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 由业务方，自行调用创建bean 对象，业务方自己会知道它的controller 的包路径。
  * 这个是处理统一的返回值的，将所有的返回值都封装到一个公共的模板({@link R})中，
  * 这样在Controller 的接口中可以直接返回实际的返回值对象，在不需要有返回值的情况也可以直接添加void 作为返回值。
  */
-@ControllerAdvice
+//@ControllerAdvice
 @RequiredArgsConstructor
-public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
-    private final List<String> basePackages;
+public class WrapperResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+    private final Set<String> basePackages = new HashSet<>();
+
+    public void addBasePackages(Collection<String> basePackages) {
+        if (basePackages == null) {
+            return;
+        }
+
+        for (String basePackage : basePackages) {
+            if (StringUtils.hasText(basePackage)) {
+                this.basePackages.add(basePackage);
+            }
+        }
+    }
 
     @Override
     public boolean supports(@NonNull MethodParameter returnType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
@@ -33,12 +47,10 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
         // 只对指定包路径下的返回值类型进行自动封装
         boolean flag = false;
-        if (basePackages != null) {
-            for (String basePackage : basePackages) {
-                if (containingClass.getPackage().getName().startsWith(basePackage)) {
-                    flag = true;
-                    break;
-                }
+        for (String basePackage : basePackages) {
+            if (containingClass.getPackage().getName().startsWith(basePackage)) {
+                flag = true;
+                break;
             }
         }
 
@@ -46,7 +58,7 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             return false;
         }
 
-        return BaseResponseBodyAdvice.supportsWrapper(returnType.getParameterType(), wrapperResponseAdvice);
+        return WrapperResponseBodyAdvice.supportsWrapper(returnType.getParameterType(), wrapperResponseAdvice);
     }
 
     @Override

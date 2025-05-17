@@ -1,0 +1,45 @@
+package com.suyh.sys.web.filter;
+
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.suyh.base.mp.handler.SqlHandler;
+import com.suyh.sys.web.constants.SysWebConstants;
+import org.slf4j.MDC;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+
+@WebFilter("/**")
+public class TraceFilter implements Filter {
+    public TraceFilter() {
+        // 开启审计日志SQL 记录
+        SqlHandler.AUDIT_SQL_ENABLED = true;
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        Long traceId = IdWorker.getId();
+        // 生成或获取 traceId，这里使用 UUID 作为示例
+        // 将 traceId 放入 MDC
+        MDC.put(SysWebConstants.TRACE_ID, traceId + "");
+        response.setHeader(SysWebConstants.TRACE_ID, traceId + "");
+        request.setAttribute(SysWebConstants.TRACE_ID, traceId);
+
+        try {
+            SqlHandler.AUDIT_SQL_LIST.set(new ArrayList<>());
+            filterChain.doFilter(request, response);
+        } finally {
+            SqlHandler.AUDIT_SQL_LIST.remove();
+            MDC.remove(SysWebConstants.TRACE_ID);
+        }
+    }
+}
