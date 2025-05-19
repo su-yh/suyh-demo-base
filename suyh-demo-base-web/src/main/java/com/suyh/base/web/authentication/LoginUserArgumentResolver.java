@@ -4,7 +4,7 @@ import com.suyh.base.web.authentication.annotation.CurrUser;
 import com.suyh.base.web.constants.BaseWebConstants;
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.AbstractLoginUser;
+import com.suyh.base.web.user.LoginUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -28,7 +28,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         }
 
         Class<?> parameterType = parameter.getParameterType();
-        return AbstractLoginUser.class.isAssignableFrom(parameterType);
+        return LoginUser.class.isAssignableFrom(parameterType);
     }
 
     @Override

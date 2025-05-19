@@ -1,4 +1,4 @@
-package com.suyh.sys.web.audit;
+package com.suyh.base.web.audit;
 
 /**
  * @author suyh

@@ -1,6 +1,7 @@
 package com.suyh.base.web;
 
 import com.suyh.base.web.advice.StringTrimmerControllerAdvice;
+import com.suyh.base.web.authentication.interceptor.AuthenticationInterceptor;
 import com.suyh.base.web.configurer.BaseWebMvcConfigurer;
 import com.suyh.base.web.error.BaseErrorAttributes;
 import com.suyh.base.web.properties.BaseWebProperties;
@@ -63,5 +64,10 @@ public class BaseWebAutoConfiguration {
     @Bean
     public SecurityConfiguration securityConfiguration() {
         return new SecurityConfiguration();
+    }
+
+    @Bean
+    public AuthenticationInterceptor authenticationInterceptor() {
+        return new AuthenticationInterceptor();
     }
 }

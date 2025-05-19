@@ -1,12 +1,12 @@
-package com.suyh.sys.web.audit;
+package com.suyh.base.web.audit;
 
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.error.IErrorCode;
 import com.suyh.base.web.exception.AbstractBusinessException;
-import com.suyh.base.web.response.wrapper.WrapperResponseBodyAdvice;
 import com.suyh.base.web.response.annotation.WrapperResponseAdvice;
 import com.suyh.base.web.response.dto.R;
-import com.suyh.sys.web.util.SpelParserUtils;
+import com.suyh.base.web.response.wrapper.WrapperResponseBodyAdvice;
+import com.suyh.base.web.util.SpelParserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -41,7 +41,7 @@ public class AuditAop {
         this.beanResolver = new BeanFactoryResolver(beanFactory);
     }
 
-    @Around(value = "@annotation(com.suyh.sys.web.audit.AuditOperation)", argNames = "pjp")
+    @Around(value = "@annotation(com.suyh.base.web.audit.AuditOperation)", argNames = "pjp")
     public Object actionLog(ProceedingJoinPoint pjp) throws Throwable {
 
         MethodSignature signature = (MethodSignature) pjp.getSignature();

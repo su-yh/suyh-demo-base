@@ -1,16 +1,16 @@
-package com.suyh.sys.web.util;
+package com.suyh.base.web.util;
 
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,7 +55,7 @@ public class SpelParserUtils {
      * @param requiredType 指定返回值的类型
      * @return 表达式计算结果
      */
-    @NotNull
+    @NonNull
     public static <T> T parse(EvaluationContext context, @Language("SpEL") String expression, Object rootObject, Class<T> requiredType) {
         Object any = parse(context, expression, rootObject);
         if (any == null) {

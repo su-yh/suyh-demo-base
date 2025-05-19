@@ -1,12 +1,9 @@
 package com.suyh.sys.web;
 
-import com.suyh.sys.web.component.SysPermissionService;
 import com.suyh.sys.web.constants.SysWebConstants;
 import com.suyh.sys.web.filter.TraceFilter;
-import com.suyh.sys.web.interceptor.AuthenticationInterceptor;
 import com.suyh.sys.web.properties.SysWebProperties;
 import com.suyh.sys.web.response.SysWebWrapperResponseScanPackages;
-import com.suyh.sys.web.service.SysUserService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -32,11 +29,5 @@ public class SysWebAutoConfiguration {
     @Bean
     public SysWebWrapperResponseScanPackages sysWebWrapperResponseScanPackages() {
         return new SysWebWrapperResponseScanPackages();
-    }
-
-    @Bean
-    public AuthenticationInterceptor authenticationInterceptor(
-            SysUserService sysUserService, SysPermissionService sysPermissionService) {
-        return new AuthenticationInterceptor(sysUserService, sysPermissionService);
     }
 }
