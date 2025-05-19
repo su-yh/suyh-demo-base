@@ -10,4 +10,10 @@ public class SysWebConstants {
     public static final String BASE_PACKAGE_SERVICE = "com.suyh.sys.web.service";
     public static final String BASE_PACKAGE_COMPONENT = "com.suyh.sys.web.component";
     public static final String BASE_PACKAGE_MAPPER = "com.suyh.sys.web.mybatis.mapper";
+
+    public static final String RUOYI_PACKAGE_CONTROLLER = "com.suyh.ruoyi.web.controller";
+    public static final String RUOYI_PACKAGE_SERVICE = "com.suyh.ruoyi.web.service";
+    public static final String RUOYI_PACKAGE_COMPONENT = "com.suyh.ruoyi.web.component";
+    public static final String RUOYI_PACKAGE_MAPPER = "com.suyh.sys.web.ruoyi.mybatis.mapper";
+
 }

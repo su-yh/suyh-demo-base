@@ -14,6 +14,13 @@ public enum SysWebErrorCodeEnums implements IErrorCode {
     REFUSE_MODIFY_ADMIN_ROLE(1013002, "不允许操作超级管理员角色"),
     CANNOT_DELETE_ROLE(1013003, "角色：{0} 已分配,不能删除"),
     REFUSE_MODIFY_ADMIN_USER(1013001, "不允许操作超级管理员用户"),
+    PARAMETER_ERROR(1015001, "参数错误"),
+    FILE_NOT_EXISTS(1017001, "文件 ({0}) 不存在"),
+    USER_BAD_CREDENTIALS(1015008, "用户名或者密码错误"),
+    USER_EXISTS(1015007, "用户({0}) 已存在"),
+    USER_NOT_EXISTS(1015010, "用户({0}) 不存在"),
+    USER_LOGIN_CAPTCHA_ERROR(1015009, "验证码错误"),
+    USER_OLD_PASSWORD_NOT_MATCH(1015023, "修改密码失败，旧密码不匹配"),
     ;
 
     private final int code;

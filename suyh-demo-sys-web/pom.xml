@@ -17,6 +17,15 @@
         <spring-boot.version>2.7.4</spring-boot.version>
 
         <knife4j.version>4.4.0</knife4j.version>
+        <poi.version>4.1.2</poi.version>
+        <googleauth.version>1.5.0</googleauth.version>
+        <commons.io.version>2.13.0</commons.io.version>
+
+
+
+
+        <pagehelper.boot.version>1.4.7</pagehelper.boot.version>
+        <shiro.version>1.13.0</shiro.version>
     </properties>
 
     <dependencyManagement>
@@ -60,6 +69,44 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- excel 工具 -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+            <version>${googleauth.version}</version>
+        </dependency>
+
+        <!-- io常用工具类 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
+        </dependency>
+
+
+
+
+        <!-- TODO: suyh - 想办法把这些处理掉 -->
+        <!-- pagehelper 分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.boot.version}</version>
+        </dependency>
+
+        <!-- Shiro使用EhCache缓存框架 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>${shiro.version}</version>
         </dependency>
     </dependencies>
 

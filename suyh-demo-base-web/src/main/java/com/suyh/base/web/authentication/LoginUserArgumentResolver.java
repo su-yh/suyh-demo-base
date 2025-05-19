@@ -1,6 +1,6 @@
 package com.suyh.base.web.authentication;
 
-import com.suyh.base.web.authentication.annotation.CurrUser;
+import com.suyh.base.web.authentication.annotation.CurrLoginUser;
 import com.suyh.base.web.constants.BaseWebConstants;
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
@@ -22,7 +22,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        CurrUser ann = parameter.getParameterAnnotation(CurrUser.class);
+        CurrLoginUser ann = parameter.getParameterAnnotation(CurrLoginUser.class);
         if (ann == null) {
             return false;
         }
@@ -43,7 +43,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         Object currUser = request.getAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY);
         if (currUser == null) {    // 用户未登录
-            CurrUser ann = parameter.getParameterAnnotation(CurrUser.class);
+            CurrLoginUser ann = parameter.getParameterAnnotation(CurrLoginUser.class);
             assert ann != null;
             if (ann.required()) {    // 用户必须登录
                 throw ExceptionUtil.business(BaseWebErrorCodeEnums.USER_NOT_LOGIN);

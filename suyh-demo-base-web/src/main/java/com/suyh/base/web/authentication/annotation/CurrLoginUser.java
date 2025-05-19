@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface CurrUser {
+public @interface CurrLoginUser {
     boolean required() default true;    // 用户是否必须登录
 }
 
