@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.suyh</groupId>
-    <artifactId>suyh-demo-sys-web</artifactId>
+    <groupId>com.base</groupId>
+    <artifactId>base-dynamic-datasource-spring-boot-starter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
@@ -15,17 +15,7 @@
         <maven.compiler.target>8</maven.compiler.target>
 
         <spring-boot.version>2.7.4</spring-boot.version>
-
-        <knife4j.version>4.4.0</knife4j.version>
-        <poi.version>4.1.2</poi.version>
-        <googleauth.version>1.5.0</googleauth.version>
-        <commons.io.version>2.13.0</commons.io.version>
-
-
-
-
-        <pagehelper.boot.version>1.4.7</pagehelper.boot.version>
-        <shiro.version>1.13.0</shiro.version>
+        <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
     </properties>
 
     <dependencyManagement>
@@ -43,22 +33,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.suyh</groupId>
-            <artifactId>suyh-demo-base-mybatis-plus</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.suyh</groupId>
-            <artifactId>suyh-demo-base-dynamic-datasource</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.suyh</groupId>
-            <artifactId>suyh-demo-base-web</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -71,43 +45,33 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- excel 工具 -->
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>${poi.version}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.warrenstrange</groupId>
-            <artifactId>googleauth</artifactId>
-            <version>${googleauth.version}</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+            <version>${dynamic-datasource.version}</version>
         </dependency>
 
-        <!-- io常用工具类 -->
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons.io.version}</version>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
         </dependency>
 
-
-
-
-        <!-- TODO: suyh - 想办法把这些处理掉 -->
-        <!-- pagehelper 分页插件 -->
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>${pagehelper.boot.version}</version>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
-        <!-- Shiro使用EhCache缓存框架 -->
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
-            <version>${shiro.version}</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
     <build>

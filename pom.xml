@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.suyh</groupId>
-    <artifactId>suyh-demo-base</artifactId>
+    <groupId>com.base</groupId>
+    <artifactId>web-spring-boot-starter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -16,10 +16,10 @@
     </properties>
 
     <modules>
-        <module>suyh-demo-base-dynamic-datasource</module>
-        <module>suyh-demo-base-mybatis-plus</module>
-        <module>suyh-demo-base-web</module>
-        <module>suyh-demo-sys-web</module>
+        <module>base-dynamic-datasource-spring-boot-starter</module>
+        <module>base-mybatis-plus-spring-boot-starter</module>
+        <module>base-web-spring-boot-starter</module>
+        <module>sys-web-spring-boot-starter</module>
     </modules>
 
 
