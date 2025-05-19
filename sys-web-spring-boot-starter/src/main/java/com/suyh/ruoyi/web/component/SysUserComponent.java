@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class SysUserComponent {
 
     public static SysUser getUser(@NonNull LoginUser loginUser) {
+        // TODO: suyh - 需要实现
         throw ExceptionUtil.business(BaseWebErrorCodeEnums.NO_IMPLEMENT);
     }
 }

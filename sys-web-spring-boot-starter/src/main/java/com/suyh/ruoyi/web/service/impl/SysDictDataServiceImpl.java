@@ -3,7 +3,6 @@ package com.suyh.ruoyi.web.service.impl;
 import com.suyh.ruoyi.web.mybatis.entity.SysDictData;
 import com.suyh.ruoyi.web.mybatis.mapper.SysDictDataMapper;
 import com.suyh.ruoyi.web.service.ISysDictDataService;
-import com.suyh.ruoyi.web.util.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,10 +66,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     {
         for (Long dictCode : dictCodes)
         {
-            SysDictData data = selectDictDataById(dictCode);
             dictDataMapper.deleteDictDataById(dictCode);
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
         }
     }
 
@@ -83,13 +79,7 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     @Override
     public int insertDictData(SysDictData data)
     {
-        int row = dictDataMapper.insertDictData(data);
-        if (row > 0)
-        {
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
-        }
-        return row;
+        return dictDataMapper.insertDictData(data);
     }
 
     /**
@@ -101,12 +91,6 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     @Override
     public int updateDictData(SysDictData data)
     {
-        int row = dictDataMapper.updateDictData(data);
-        if (row > 0)
-        {
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
-        }
-        return row;
+        return dictDataMapper.updateDictData(data);
     }
 }

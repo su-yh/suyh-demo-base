@@ -1,7 +1,7 @@
 package com.suyh.ruoyi.web.domain;
 
 import com.suyh.base.web.response.dto.R;
-import com.suyh.ruoyi.web.util.HttpStatus;
+import org.springframework.http.HttpStatus;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
 
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult success(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.SUCCESS, msg, data);
+        return new AjaxResult(HttpStatus.OK.value(), msg, data);
     }
 
     /**
@@ -124,7 +124,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult warn(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.WARN, msg, data);
+        return new AjaxResult(601, msg, data);
     }
 
     /**
@@ -157,7 +157,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult error(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.ERROR, msg, data);
+        return new AjaxResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg, data);
     }
 
     /**
@@ -179,7 +179,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public boolean isSuccess()
     {
-        return Objects.equals(HttpStatus.SUCCESS, this.get(CODE_TAG));
+        return Objects.equals(HttpStatus.OK.value(), this.get(CODE_TAG));
     }
 
     /**
@@ -189,7 +189,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public boolean isWarn()
     {
-        return Objects.equals(HttpStatus.WARN, this.get(CODE_TAG));
+        return Objects.equals(601, this.get(CODE_TAG));
     }
 
     /**
@@ -199,7 +199,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public boolean isError()
     {
-        return Objects.equals(HttpStatus.ERROR, this.get(CODE_TAG));
+        return Objects.equals(HttpStatus.INTERNAL_SERVER_ERROR.value(), this.get(CODE_TAG));
     }
 
     /**

@@ -14,11 +14,12 @@ import com.suyh.ruoyi.web.mybatis.mapper.SysRoleMenuMapper;
 import com.suyh.ruoyi.web.mybatis.mapper.SysUserRoleMapper;
 import com.suyh.ruoyi.web.service.ISysRoleService;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
-import com.suyh.ruoyi.web.util.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,6 +34,10 @@ import java.util.Set;
 @Service
 public class SysRoleServiceImpl implements ISysRoleService
 {
+
+    @Resource
+    private ApplicationContext context;
+
     @Autowired
     private SysRoleMapper roleMapper;
 
@@ -117,7 +122,7 @@ public class SysRoleServiceImpl implements ISysRoleService
     @Override
     public List<SysRole> selectRoleAll()
     {
-        return SpringUtils.getBean(getClass()).selectRoleList(new SysRole());
+        return context.getBean(getClass()).selectRoleList(new SysRole());
     }
 
     /**

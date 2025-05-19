@@ -8,17 +8,12 @@ import com.suyh.ruoyi.web.mybatis.entity.SysDictType;
 import com.suyh.ruoyi.web.mybatis.mapper.SysDictDataMapper;
 import com.suyh.ruoyi.web.mybatis.mapper.SysDictTypeMapper;
 import com.suyh.ruoyi.web.service.ISysDictTypeService;
-import com.suyh.ruoyi.web.util.DictUtils;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 字典 业务层处理
@@ -33,15 +28,6 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
 
     @Autowired
     private SysDictDataMapper dictDataMapper;
-
-    /**
-     * 项目启动时，初始化字典到缓存
-     */
-    @PostConstruct
-    public void init()
-    {
-        loadingDictCache();
-    }
 
     /**
      * 根据条件分页查询字典类型
@@ -75,18 +61,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     @Override
     public List<SysDictData> selectDictDataByType(String dictType)
     {
-        List<SysDictData> dictDatas = DictUtils.getDictCache(dictType);
-        if (RuoyiStringUtils.isNotEmpty(dictDatas))
-        {
-            return dictDatas;
-        }
-        dictDatas = dictDataMapper.selectDictDataByType(dictType);
-        if (RuoyiStringUtils.isNotEmpty(dictDatas))
-        {
-            DictUtils.setDictCache(dictType, dictDatas);
-            return dictDatas;
-        }
-        return null;
+        return dictDataMapper.selectDictDataByType(dictType);
     }
 
     /**
@@ -130,42 +105,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
                 throw ExceptionUtil.business(RuoyiErrorCodeEnums.CANNOT_DELETE_DICT_TYPE, dictType.getDictName());
             }
             dictTypeMapper.deleteDictTypeById(dictId);
-            DictUtils.removeDictCache(dictType.getDictType());
         }
-    }
-
-    /**
-     * 加载字典缓存数据
-     */
-    @Override
-    public void loadingDictCache()
-    {
-        SysDictData dictData = new SysDictData();
-        dictData.setStatus("0");
-        Map<String, List<SysDictData>> dictDataMap = dictDataMapper.selectDictDataList(dictData).stream().collect(Collectors.groupingBy(SysDictData::getDictType));
-        for (Map.Entry<String, List<SysDictData>> entry : dictDataMap.entrySet())
-        {
-            DictUtils.setDictCache(entry.getKey(), entry.getValue().stream().sorted(Comparator.comparing(SysDictData::getDictSort)).collect(Collectors.toList()));
-        }
-    }
-
-    /**
-     * 清空字典缓存数据
-     */
-    @Override
-    public void clearDictCache()
-    {
-        DictUtils.clearDictCache();
-    }
-
-    /**
-     * 重置字典缓存数据
-     */
-    @Override
-    public void resetDictCache()
-    {
-        clearDictCache();
-        loadingDictCache();
     }
 
     /**
@@ -177,12 +117,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     @Override
     public int insertDictType(SysDictType dict)
     {
-        int row = dictTypeMapper.insertDictType(dict);
-        if (row > 0)
-        {
-            DictUtils.setDictCache(dict.getDictType(), null);
-        }
-        return row;
+        return dictTypeMapper.insertDictType(dict);
     }
 
     /**
@@ -197,13 +132,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
     {
         SysDictType oldDict = dictTypeMapper.selectDictTypeById(dict.getDictId());
         dictDataMapper.updateDictDataType(oldDict.getDictType(), dict.getDictType());
-        int row = dictTypeMapper.updateDictType(dict);
-        if (row > 0)
-        {
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dict.getDictType());
-            DictUtils.setDictCache(dict.getDictType(), dictDatas);
-        }
-        return row;
+        return dictTypeMapper.updateDictType(dict);
     }
 
     /**

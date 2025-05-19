@@ -8,10 +8,10 @@ import com.suyh.ruoyi.web.domain.page.PageUtils;
 import com.suyh.ruoyi.web.domain.page.TableSupport;
 import com.suyh.ruoyi.web.domain.AjaxResult;
 import com.suyh.ruoyi.web.domain.page.TableDataInfo;
-import com.suyh.ruoyi.web.util.HttpStatus;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
 import com.suyh.ruoyi.web.util.SqlUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class BaseController
     protected TableDataInfo getDataTable(List<?> list)
     {
         TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setCode(HttpStatus.OK.value());
         rspData.setMsg(R.SUCCESS_MSG);
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
