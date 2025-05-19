@@ -25,11 +25,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"     column="update_by"    />
         <result property="updated"   column="updated"  />
         <result property="remark"       column="remark"       />
-        <association property="dept"    javaType="SysDept"         resultMap="deptResult" />
+        <association property="dept"    javaType="com.suyh.ruoyi.web.mybatis.entity.SysDept"         resultMap="deptResult" />
         <collection  property="roles"   javaType="java.util.List"  resultMap="RoleResult" />
     </resultMap>
 	
-    <resultMap id="deptResult" type="SysDept">
+    <resultMap id="deptResult" type="com.suyh.ruoyi.web.mybatis.entity.SysDept">
         <id     property="deptId"    column="dept_id"     />
         <result property="parentId"  column="parent_id"   />
         <result property="deptName"  column="dept_name"   />
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"    column="dept_status" />
     </resultMap>
 	
-    <resultMap id="RoleResult" type="SysRole">
+    <resultMap id="RoleResult" type="com.suyh.ruoyi.web.mybatis.entity.SysRole">
         <id     property="roleId"       column="role_id"        />
         <result property="roleName"     column="role_name"      />
         <result property="roleKey"      column="role_key"       />

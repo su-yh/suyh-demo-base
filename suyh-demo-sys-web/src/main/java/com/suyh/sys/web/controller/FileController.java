@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +26,7 @@ import java.util.UUID;
  * @since 2024-09-07
  */
 @Tag(name = "文件系统")
-@RestController
+//@RestController
 @RequestMapping("/system/file")
 @RequiredArgsConstructor
 @Validated

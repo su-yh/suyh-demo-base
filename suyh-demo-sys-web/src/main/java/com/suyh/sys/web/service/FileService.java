@@ -10,7 +10,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +25,7 @@ import java.nio.file.Files;
  * @author suyh
  * @since 2024-09-07
  */
-@Service
+//@Service
 @RequiredArgsConstructor
 @Slf4j
 public class FileService {

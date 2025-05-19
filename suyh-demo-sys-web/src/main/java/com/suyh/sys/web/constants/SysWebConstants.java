@@ -14,6 +14,6 @@ public class SysWebConstants {
     public static final String RUOYI_PACKAGE_CONTROLLER = "com.suyh.ruoyi.web.controller";
     public static final String RUOYI_PACKAGE_SERVICE = "com.suyh.ruoyi.web.service";
     public static final String RUOYI_PACKAGE_COMPONENT = "com.suyh.ruoyi.web.component";
-    public static final String RUOYI_PACKAGE_MAPPER = "com.suyh.sys.web.ruoyi.mybatis.mapper";
+    public static final String RUOYI_PACKAGE_MAPPER = "com.suyh.ruoyi.web.mybatis.mapper";
 
 }
