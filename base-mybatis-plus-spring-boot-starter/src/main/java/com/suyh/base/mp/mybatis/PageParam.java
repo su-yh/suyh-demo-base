@@ -23,7 +23,6 @@ public class PageParam implements Serializable {
 
     // 每页条数不能为空
     // 每页条数最小值为 1
-    // 每页条数最大值为 100
     private Integer pageSize = PAGE_SIZE;
 
     @JsonIgnore

@@ -1,5 +1,8 @@
 package com.suyh.ruoyi.web.domain.page;
 
+import com.suyh.base.mp.mybatis.PageResult;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,6 +11,7 @@ import java.util.List;
  * 
  * @author ruoyi
  */
+@Data
 public class TableDataInfo implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -43,47 +47,12 @@ public class TableDataInfo implements Serializable
         this.total = total;
     }
 
-    public long getTotal()
-    {
-        return total;
+    public TableDataInfo(PageResult<?> pageResult) {
+        this.total = pageResult.getTotal();
+        this.rows = pageResult.getList();
     }
 
-    public void setTotal(long total)
-    {
-        this.total = total;
-    }
-
-    public List<?> getRows()
-    {
-        return rows;
-    }
-
-    public void setRows(List<?> rows)
-    {
-        this.rows = rows;
-    }
-
-    public int getCode()
-    {
-        return code;
-    }
-
-    public void setCode(int code)
-    {
-        this.code = code;
-    }
-
-    public String getMsg()
-    {
-        return message;
-    }
-
-    public void setMsg(String msg)
-    {
+    public void setMsg(String msg) {
         this.message = msg;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
