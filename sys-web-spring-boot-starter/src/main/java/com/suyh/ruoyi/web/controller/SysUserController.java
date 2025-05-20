@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -169,7 +170,7 @@ public class SysUserController extends BaseController
     /**
      * 修改用户
      */
-//    @PreAuthorize("@ss.hasPermi('system:user:edit')")
+    @PreAuthorize("@ss.hasPerm(#loginUser, 'system:user:edit')")
 //    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @AuditOperation("@audit.auditRecord(" +
             "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_USER_EDIT, " +
@@ -245,7 +246,7 @@ public class SysUserController extends BaseController
     /**
      * 删除用户
      */
-//    @PreAuthorize("@ss.hasPermi('system:user:remove')")
+    @PreAuthorize("@ss.hasPerm(#loginUser, 'system:user:remove')")
 //    @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @AuditOperation("@audit.auditRecord(" +
             "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_USER_DELETE, " +

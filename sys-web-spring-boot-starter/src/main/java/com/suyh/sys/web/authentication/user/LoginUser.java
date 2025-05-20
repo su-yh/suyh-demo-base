@@ -7,6 +7,7 @@ import com.suyh.ruoyi.web.mybatis.entity.SysUser;
 import com.suyh.ruoyi.web.service.SysPermissionService;
 import com.suyh.sys.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 
 import java.util.Set;
 
@@ -52,6 +53,7 @@ public class LoginUser extends AbstractLoginUser {
         return user;
     }
 
+    @NonNull
     public Set<String> getPermissions() {
         if (permissions == null) {
             SysUser user = getUser();

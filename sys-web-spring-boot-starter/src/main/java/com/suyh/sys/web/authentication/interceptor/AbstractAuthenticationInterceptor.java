@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -74,9 +72,9 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
         // 正常登录
         if (loginUser != null) {
             request.setAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY, loginUser);
-            UsernamePasswordAuthenticationToken authenticationToken
-                    = new UsernamePasswordAuthenticationToken(loginUser, null, null);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            // UsernamePasswordAuthenticationToken authenticationToken
+            //         = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+            // SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             return;
         }
 

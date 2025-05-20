@@ -1,3 +1,4 @@
 
+com.suyh.base.web.security.BaseWebSecurityConfiguration
 com.suyh.base.web.BaseWebAutoConfiguration
 
