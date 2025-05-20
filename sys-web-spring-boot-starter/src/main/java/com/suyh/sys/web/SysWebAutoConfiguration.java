@@ -1,9 +1,13 @@
 package com.suyh.sys.web;
 
+import com.suyh.ruoyi.web.service.SysPermissionService;
+import com.suyh.sys.web.authentication.interceptor.AuthenticationInterceptor;
+import com.suyh.sys.web.configurer.SysWebMvcConfigurer;
 import com.suyh.sys.web.constants.SysWebConstants;
 import com.suyh.sys.web.filter.TraceFilter;
 import com.suyh.sys.web.properties.SysWebProperties;
 import com.suyh.sys.web.response.SysWebWrapperResponseScanPackages;
+import com.suyh.sys.web.service.UserService;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
 import org.mybatis.spring.annotation.MapperScan;
@@ -54,5 +58,16 @@ public class SysWebAutoConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationInterceptor authenticationInterceptor(
+            UserService userService, SysPermissionService permissionService) {
+        return new AuthenticationInterceptor(userService, permissionService);
+    }
+
+    @Bean
+    public SysWebMvcConfigurer sysWebMvcConfigurer() {
+        return new SysWebMvcConfigurer();
     }
 }

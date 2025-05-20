@@ -1,14 +1,14 @@
 package com.suyh.ruoyi.web.controller;
 
-import com.suyh.base.web.authentication.annotation.CurrLoginUser;
 import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.LoginUser;
 import com.suyh.ruoyi.web.constants.UserConstants;
 import com.suyh.ruoyi.web.constants.enums.RuoyiErrorCodeEnums;
 import com.suyh.ruoyi.web.domain.AjaxResult;
 import com.suyh.ruoyi.web.mybatis.entity.SysMenu;
 import com.suyh.ruoyi.web.service.ISysMenuService;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
+import com.suyh.sys.web.authentication.annotation.CurrLoginUser;
+import com.suyh.sys.web.authentication.user.LoginUser;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

@@ -1,9 +1,9 @@
-package com.suyh.base.web.authentication.interceptor;
+package com.suyh.sys.web.authentication.interceptor;
 
-import com.suyh.base.web.authentication.annotation.Permit;
 import com.suyh.base.web.constants.BaseWebConstants;
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
+import com.suyh.sys.web.authentication.annotation.Permit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;

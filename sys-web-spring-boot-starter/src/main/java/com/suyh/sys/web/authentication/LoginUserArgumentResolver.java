@@ -1,10 +1,10 @@
-package com.suyh.base.web.authentication;
+package com.suyh.sys.web.authentication;
 
-import com.suyh.base.web.authentication.annotation.CurrLoginUser;
 import com.suyh.base.web.constants.BaseWebConstants;
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.LoginUser;
+import com.suyh.sys.web.authentication.annotation.CurrLoginUser;
+import com.suyh.sys.web.authentication.user.LoginUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.support.WebDataBinderFactory;

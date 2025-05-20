@@ -1,4 +1,4 @@
-package com.suyh.base.web.authentication.annotation;
+package com.suyh.sys.web.authentication.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

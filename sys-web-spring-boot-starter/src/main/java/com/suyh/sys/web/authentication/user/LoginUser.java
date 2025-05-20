@@ -1,0 +1,66 @@
+package com.suyh.sys.web.authentication.user;
+
+import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
+import com.suyh.base.web.exception.ExceptionUtil;
+import com.suyh.base.web.user.AbstractLoginUser;
+import com.suyh.ruoyi.web.mybatis.entity.SysUser;
+import com.suyh.ruoyi.web.service.SysPermissionService;
+import com.suyh.sys.web.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Set;
+
+@Slf4j
+public class LoginUser extends AbstractLoginUser {
+    public static final String NICK_NAME_KEY = "nickname";
+
+    public LoginUser(UserService userService, SysPermissionService permissionService, Long id, String username, String nickname) {
+        super(id, username, nickname);
+
+        if (userService == null || id == null || username == null || nickname == null) {
+            log.error("userService or id or username is null!, id: {}, username: {}, nickname: {}",
+                    id, username, nickname);
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+        }
+
+        this.userService = userService;
+        this.permissionService = permissionService;
+
+    }
+
+    private final UserService userService;
+    private final SysPermissionService permissionService;
+
+
+
+    /**
+     * 权限列表
+     */
+    private volatile Set<String> permissions;
+
+    private volatile SysUser user;
+
+    public SysUser getUser() {
+        if (user == null) {
+            synchronized (this) {
+                if (user == null) {
+                    user = userService.obtainUserById(id);
+                }
+            }
+        }
+
+        return user;
+    }
+
+    public Set<String> getPermissions() {
+        if (permissions == null) {
+            SysUser user = getUser();
+            synchronized (this) {
+                if (permissions == null) {
+                    permissions = permissionService.getMenuPermission(user);
+                }
+            }
+        }
+        return permissions;
+    }
+}

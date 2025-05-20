@@ -1,9 +1,11 @@
-package com.suyh.base.web.authentication.interceptor;
+package com.suyh.sys.web.authentication.interceptor;
 
 import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.LoginUser;
 import com.suyh.base.web.util.TokenUtils;
+import com.suyh.ruoyi.web.service.SysPermissionService;
+import com.suyh.sys.web.authentication.user.LoginUser;
+import com.suyh.sys.web.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,9 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationInterceptor extends AbstractAuthenticationInterceptor {
+    private final UserService userService;
+    private final SysPermissionService permissionService;
+
     @Override
     protected Object parseUserToken(String userToken) {
         if (!StringUtils.hasText(userToken)) {
@@ -32,10 +37,6 @@ public class AuthenticationInterceptor extends AbstractAuthenticationInterceptor
         }
 
         long id = Long.parseLong(strId);
-        LoginUser loginUser = new LoginUser();
-        loginUser.setId(id);
-        loginUser.setUsername(username);
-        loginUser.setNickname(nickname);
-        return loginUser;
+        return new LoginUser(userService, permissionService, id, username, nickname);
     }
 }

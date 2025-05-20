@@ -1,27 +1,14 @@
 package com.suyh.base.web.configurer;
 
-import com.suyh.base.web.authentication.LoginUserArgumentResolver;
-import com.suyh.base.web.authentication.interceptor.AbstractAuthenticationInterceptor;
 import com.suyh.base.web.error.BaseHandlerExceptionResolver;
 import org.springframework.lang.NonNull;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 public class BaseWebMvcConfigurer implements WebMvcConfigurer {
-    @Resource
-    private AbstractAuthenticationInterceptor loginInterceptor;
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new LoginUserArgumentResolver());
-    }
-
     @Override
     public void extendHandlerExceptionResolvers(@NonNull List<HandlerExceptionResolver> resolvers) {
         // 将spring mvc 创建的DefaultHandlerExceptionResolver 删除掉，使用自定义的DefaultHandlerExceptionResolver 派生类替代
@@ -37,10 +24,5 @@ public class BaseWebMvcConfigurer implements WebMvcConfigurer {
         }
 
         resolvers.add(new BaseHandlerExceptionResolver());
-    }
-
-    @Override
-    public void addInterceptors(@NonNull InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/**");
     }
 }

@@ -3,7 +3,7 @@ package com.suyh.sys.web.component;
 import com.suyh.base.mp.handler.SqlHandler;
 import com.suyh.base.web.audit.AbstractAuditComponent;
 import com.suyh.base.web.audit.IAudit;
-import com.suyh.base.web.user.LoginUser;
+import com.suyh.base.web.user.AbstractLoginUser;
 import com.suyh.base.web.util.JsonUtils;
 import com.suyh.sys.web.constants.SysWebConstants;
 import com.suyh.sys.web.mybatis.entity.AuditLogEntity;
@@ -34,7 +34,7 @@ public class AuditComponent extends AbstractAuditComponent {
             IAudit auditOperation,
             Object spelReturnValue,
             HttpServletRequest request,
-            LoginUser loginUser,
+            AbstractLoginUser loginUser,
             Object... reqArgs) {
         AuditLogEntity recordEntity = new AuditLogEntity();
         recordEntity.setUserId(loginUser.getId()).setUserNickname(loginUser.getNickname())

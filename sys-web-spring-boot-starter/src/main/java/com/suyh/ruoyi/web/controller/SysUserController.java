@@ -1,10 +1,7 @@
 package com.suyh.ruoyi.web.controller;
 
 import com.suyh.base.web.audit.AuditOperation;
-import com.suyh.base.web.authentication.annotation.CurrLoginUser;
 import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.LoginUser;
-import com.suyh.ruoyi.web.component.SysUserComponent;
 import com.suyh.ruoyi.web.constants.enums.RuoyiErrorCodeEnums;
 import com.suyh.ruoyi.web.domain.AjaxResult;
 import com.suyh.ruoyi.web.domain.page.TableDataInfo;
@@ -13,6 +10,8 @@ import com.suyh.ruoyi.web.mybatis.entity.SysUser;
 import com.suyh.ruoyi.web.service.ISysRoleService;
 import com.suyh.ruoyi.web.service.ISysUserService;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
+import com.suyh.sys.web.authentication.annotation.CurrLoginUser;
+import com.suyh.sys.web.authentication.user.LoginUser;
 import com.suyh.sys.web.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -210,7 +209,7 @@ public class SysUserController extends BaseController
     @GetMapping("/profile")
     public AjaxResult querySelf(
             @Parameter(hidden = true) @CurrLoginUser LoginUser loginUser) {
-        SysUser user = SysUserComponent.getUser(loginUser);
+        SysUser user = loginUser.getUser();
         return success(user);
     }
 

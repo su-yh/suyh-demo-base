@@ -1,10 +1,10 @@
 package com.suyh.sys.web.service;
 
 import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.LoginUser;
 import com.suyh.base.web.util.TokenUtils;
 import com.suyh.ruoyi.web.mybatis.entity.SysUser;
 import com.suyh.ruoyi.web.mybatis.mapper.SysUserMapper;
+import com.suyh.sys.web.authentication.user.LoginUser;
 import com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums;
 import com.suyh.sys.web.properties.SysWebProperties;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
