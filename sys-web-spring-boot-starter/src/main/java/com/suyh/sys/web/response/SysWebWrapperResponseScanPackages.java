@@ -1,6 +1,6 @@
 package com.suyh.sys.web.response;
 
-import com.suyh.base.web.response.wrapper.WrapperResponseScanPackages;
+import com.base.web.response.wrapper.WrapperResponseScanPackages;
 import com.suyh.sys.web.constants.SysWebConstants;
 
 import java.util.Collection;

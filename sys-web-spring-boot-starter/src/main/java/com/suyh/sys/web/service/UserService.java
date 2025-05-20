@@ -1,7 +1,7 @@
 package com.suyh.sys.web.service;
 
-import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.util.TokenUtils;
+import com.base.web.exception.ExceptionUtil;
+import com.base.web.util.TokenUtils;
 import com.suyh.ruoyi.web.mybatis.entity.SysUser;
 import com.suyh.ruoyi.web.mybatis.mapper.SysUserMapper;
 import com.suyh.sys.web.authentication.user.LoginUser;

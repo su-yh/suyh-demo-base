@@ -1,6 +1,6 @@
 package com.suyh.ruoyi.web.domain;
 
-import com.suyh.base.web.response.dto.R;
+import com.base.web.response.dto.R;
 import org.springframework.http.HttpStatus;
 import com.suyh.ruoyi.web.util.RuoyiStringUtils;
 
@@ -63,7 +63,7 @@ public class AjaxResult extends HashMap<String, Object>
 
     /**
      * 返回成功消息
-     * 
+     *
      * @return 成功消息
      */
     public static AjaxResult success()
@@ -73,7 +73,7 @@ public class AjaxResult extends HashMap<String, Object>
 
     /**
      * 返回成功数据
-     * 
+     *
      * @return 成功消息
      */
     public static AjaxResult success(Object data)
@@ -83,7 +83,7 @@ public class AjaxResult extends HashMap<String, Object>
 
     /**
      * 返回成功消息
-     * 
+     *
      * @param msg 返回内容
      * @return 成功消息
      */

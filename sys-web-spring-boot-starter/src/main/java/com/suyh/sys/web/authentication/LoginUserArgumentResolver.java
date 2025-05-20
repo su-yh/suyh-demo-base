@@ -1,7 +1,7 @@
 package com.suyh.sys.web.authentication;
 
-import com.suyh.base.web.constants.BaseWebConstants;
-import com.suyh.base.web.exception.ExceptionUtil;
+import com.base.web.constants.BaseWebConstants;
+import com.base.web.exception.ExceptionUtil;
 import com.suyh.sys.web.authentication.annotation.CurrLoginUser;
 import com.suyh.sys.web.authentication.user.LoginUser;
 import com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums;

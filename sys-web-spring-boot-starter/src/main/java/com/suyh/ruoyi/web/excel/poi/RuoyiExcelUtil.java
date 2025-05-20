@@ -1,7 +1,7 @@
 package com.suyh.ruoyi.web.excel.poi;
 
-import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
-import com.suyh.base.web.exception.ExceptionUtil;
+import com.base.web.constants.enums.BaseWebErrorCodeEnums;
+import com.base.web.exception.ExceptionUtil;
 import com.suyh.ruoyi.web.excel.RuoyiConvert;
 import com.suyh.ruoyi.web.excel.annotation.RuoyiExcel;
 import com.suyh.ruoyi.web.excel.annotation.RuoyiExcels;

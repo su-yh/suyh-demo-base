@@ -1,10 +1,10 @@
 package com.suyh.sys.web.component;
 
 import com.base.mp.handler.SqlHandler;
-import com.suyh.base.web.audit.AbstractAuditComponent;
-import com.suyh.base.web.audit.IAudit;
-import com.suyh.base.web.user.AbstractLoginUser;
-import com.suyh.base.web.util.JsonUtils;
+import com.base.web.audit.AbstractAuditComponent;
+import com.base.web.audit.IAudit;
+import com.base.web.user.AbstractLoginUser;
+import com.base.web.util.JsonUtils;
 import com.suyh.sys.web.constants.SysWebConstants;
 import com.suyh.sys.web.mybatis.entity.AuditLogEntity;
 import com.suyh.sys.web.mybatis.mapper.AuditLogMapper;

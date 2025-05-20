@@ -1,7 +1,7 @@
 package com.suyh.ruoyi.web.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.suyh.base.web.response.dto.R;
+import com.base.web.response.dto.R;
 import com.suyh.ruoyi.web.domain.AjaxResult;
 import com.suyh.ruoyi.web.domain.page.PageUtils;
 import com.suyh.ruoyi.web.domain.page.TableDataInfo;

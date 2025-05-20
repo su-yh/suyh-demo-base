@@ -1,6 +1,6 @@
 package com.suyh.ruoyi.web.service.impl;
 
-import com.suyh.base.web.exception.ExceptionUtil;
+import com.base.web.exception.ExceptionUtil;
 import com.suyh.ruoyi.web.constants.UserConstants;
 import com.suyh.ruoyi.web.constants.enums.RuoyiErrorCodeEnums;
 import com.suyh.ruoyi.web.mybatis.entity.SysDictData;

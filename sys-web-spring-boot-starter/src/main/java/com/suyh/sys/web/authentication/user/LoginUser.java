@@ -1,8 +1,8 @@
 package com.suyh.sys.web.authentication.user;
 
-import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
-import com.suyh.base.web.exception.ExceptionUtil;
-import com.suyh.base.web.user.AbstractLoginUser;
+import com.base.web.constants.enums.BaseWebErrorCodeEnums;
+import com.base.web.exception.ExceptionUtil;
+import com.base.web.user.AbstractLoginUser;
 import com.suyh.ruoyi.web.mybatis.entity.SysUser;
 import com.suyh.ruoyi.web.service.SysPermissionService;
 import com.suyh.sys.web.service.UserService;

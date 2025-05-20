@@ -1,7 +1,7 @@
 package com.suyh.ruoyi.web.util;
 
 
-import com.suyh.base.web.exception.ExceptionUtil;
+import com.base.web.exception.ExceptionUtil;
 import com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums;
 
 /**

@@ -1,7 +1,7 @@
 package com.suyh.sys.web.controller;
 
-import com.suyh.base.web.response.annotation.WrapperResponseAdvice;
-import com.suyh.base.web.response.dto.R;
+import com.base.web.response.annotation.WrapperResponseAdvice;
+import com.base.web.response.dto.R;
 import com.suyh.sys.web.authentication.annotation.Permit;
 import com.suyh.sys.web.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;

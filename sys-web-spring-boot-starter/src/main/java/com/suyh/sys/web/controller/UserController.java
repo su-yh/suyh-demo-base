@@ -1,6 +1,6 @@
 package com.suyh.sys.web.controller;
 
-import com.suyh.base.web.response.dto.R;
+import com.base.web.response.dto.R;
 import com.suyh.sys.web.authentication.annotation.CurrLoginUser;
 import com.suyh.sys.web.authentication.annotation.Permit;
 import com.suyh.sys.web.authentication.user.LoginUser;

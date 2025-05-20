@@ -1,6 +1,6 @@
 package com.suyh.sys.web.constants.enums;
 
-import com.suyh.base.web.audit.IAudit;
+import com.base.web.audit.IAudit;
 
 /**
  * @author suyh

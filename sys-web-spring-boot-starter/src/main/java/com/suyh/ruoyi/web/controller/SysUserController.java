@@ -1,7 +1,7 @@
 package com.suyh.ruoyi.web.controller;
 
-import com.suyh.base.web.audit.AuditOperation;
-import com.suyh.base.web.exception.ExceptionUtil;
+import com.base.web.audit.AuditOperation;
+import com.base.web.exception.ExceptionUtil;
 import com.suyh.ruoyi.web.constants.enums.RuoyiErrorCodeEnums;
 import com.suyh.ruoyi.web.domain.AjaxResult;
 import com.suyh.ruoyi.web.domain.page.TableDataInfo;

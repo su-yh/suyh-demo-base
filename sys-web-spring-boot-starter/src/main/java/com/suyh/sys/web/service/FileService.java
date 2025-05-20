@@ -1,7 +1,7 @@
 package com.suyh.sys.web.service;
 
-import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
-import com.suyh.base.web.exception.ExceptionUtil;
+import com.base.web.constants.enums.BaseWebErrorCodeEnums;
+import com.base.web.exception.ExceptionUtil;
 import com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums;
 import com.suyh.sys.web.util.FileUtils;
 import lombok.RequiredArgsConstructor;
