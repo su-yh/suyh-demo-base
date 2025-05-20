@@ -1,9 +1,9 @@
 package com.suyh.sys.web.authentication.interceptor;
 
 import com.suyh.base.web.constants.BaseWebConstants;
-import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
 import com.suyh.sys.web.authentication.annotation.Permit;
+import com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
@@ -94,7 +94,7 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
             return;
         }
 
-        throw ExceptionUtil.business(BaseWebErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
+        throw ExceptionUtil.business(SysWebErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
     }
 
     @Nullable

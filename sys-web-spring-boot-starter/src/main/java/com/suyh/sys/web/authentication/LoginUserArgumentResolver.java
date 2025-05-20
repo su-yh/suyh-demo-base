@@ -1,10 +1,10 @@
 package com.suyh.sys.web.authentication;
 
 import com.suyh.base.web.constants.BaseWebConstants;
-import com.suyh.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.suyh.base.web.exception.ExceptionUtil;
 import com.suyh.sys.web.authentication.annotation.CurrLoginUser;
 import com.suyh.sys.web.authentication.user.LoginUser;
+import com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -46,7 +46,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             CurrLoginUser ann = parameter.getParameterAnnotation(CurrLoginUser.class);
             assert ann != null;
             if (ann.required()) {    // 用户必须登录
-                throw ExceptionUtil.business(BaseWebErrorCodeEnums.USER_NOT_LOGIN);
+                throw ExceptionUtil.business(SysWebErrorCodeEnums.USER_NOT_LOGIN);
             }
         }
 
