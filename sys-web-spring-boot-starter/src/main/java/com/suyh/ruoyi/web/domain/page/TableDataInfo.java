@@ -1,6 +1,6 @@
 package com.suyh.ruoyi.web.domain.page;
 
-import com.suyh.base.mp.mybatis.PageResult;
+import com.base.mp.mybatis.PageResult;
 import lombok.Data;
 
 import java.io.Serializable;

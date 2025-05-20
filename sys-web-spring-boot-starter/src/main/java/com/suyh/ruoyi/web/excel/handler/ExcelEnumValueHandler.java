@@ -2,7 +2,7 @@ package com.suyh.ruoyi.web.excel.handler;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.suyh.base.mp.typehandler.enlist.AbstractEnumListTypeHandler;
+import com.base.mp.typehandler.enlist.AbstractEnumListTypeHandler;
 import com.suyh.ruoyi.web.excel.annotation.ExcelEnumMessageCategory;
 import com.suyh.ruoyi.web.excel.annotation.ExcelEnumMessageCode;
 import com.suyh.ruoyi.web.excel.poi.RuoyiExcelHandlerAdapter;

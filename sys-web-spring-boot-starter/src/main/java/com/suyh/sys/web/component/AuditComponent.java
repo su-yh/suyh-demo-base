@@ -1,6 +1,6 @@
 package com.suyh.sys.web.component;
 
-import com.suyh.base.mp.handler.SqlHandler;
+import com.base.mp.handler.SqlHandler;
 import com.suyh.base.web.audit.AbstractAuditComponent;
 import com.suyh.base.web.audit.IAudit;
 import com.suyh.base.web.user.AbstractLoginUser;

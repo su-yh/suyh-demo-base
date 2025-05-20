@@ -1,7 +1,7 @@
 package com.suyh.sys.web.filter;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.suyh.base.mp.handler.SqlHandler;
+import com.base.mp.handler.SqlHandler;
 import com.suyh.sys.web.constants.SysWebConstants;
 import org.slf4j.MDC;
 import org.springframework.util.StringUtils;

@@ -1,6 +1,6 @@
 package com.suyh.sys.web.mybatis.mapper;
 
-import com.suyh.base.mp.mybatis.BaseMapperX;
+import com.base.mp.mybatis.BaseMapperX;
 import com.suyh.sys.web.mybatis.entity.AuditLogEntity;
 import org.apache.ibatis.annotations.Mapper;
 
