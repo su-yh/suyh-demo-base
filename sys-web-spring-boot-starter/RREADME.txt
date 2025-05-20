@@ -1,18 +1,25 @@
 
 1. 如果需要对接口的返回值进行自动封装统一结构，需要实现接口 WrapperResponseScanPackages 并注册为bean 对象
 2. 自定义错误码枚举 ErrorCodeEnums(类名自定义) 并实现接口 IErrorCode
-    同时需要创建文件 resources/META-INF/services/com.base.web.error.IErrorCode 并将该枚举类的完全限定类名写在里面
+    同时需要创建文件 classpath:/META-INF/services/com.base.web.error.IErrorCode 并将该枚举类的完全限定类名写在里面
     这里的作用是检查所定义的错误码是否有重复的code 值，如果未配置则无法检查错误码重复的问题
     约定 code 在 2000_000 以内的数字留给sdk，业务相关的从 2000_000 开始使用
 3. 全局异常拦截处理已经添加，业务异常直接使用  com.base.web.exception.ExceptionUtil 即可
     例：throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR)
 4. 数据库脚本
     4.1 支持多数据源以及flywaydb
-    4.2 sdk 所需要的用户相关的SQL 存放在目录：resources/sqls/mysql/sys/base
+    4.2 sdk 所需要的用户相关的SQL 存放在目录：classpath:/sqls/mysql/sys/base
         同时sdk 中的flyway 版本文件名采用格式：V00_00_00_XXX__xxxxx.sql 业务相关的版本文件名需要与其区分，不要冲突了
     4.3 如果启用flyway 则需要将 sdk 相关的SQL 目录配置上
     4.4 sdk 所使用的数据源为默认数据源，所以用户相关的数据源需要处理为默认数据源，sql 目录配置也应该配置在默认数据源上面
     4.5 多数据源配置示例
+        首先，必须先禁用掉 Flyway 的自动配置
+        spring:
+          flyway:
+            # 系统实现的 FlywayAutoConfiguration 需要禁用掉
+            enabled: false
+
+        多数据源的配置，以及flyway 的启用
         base:
           datasource:
             hikari:
