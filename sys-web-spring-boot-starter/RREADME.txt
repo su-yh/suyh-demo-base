@@ -1,10 +1,10 @@
 
 1. 如果需要对接口的返回值进行自动封装统一结构，需要实现接口 WrapperResponseScanPackages 并注册为bean 对象
 2. 自定义错误码枚举 ErrorCodeEnums(类名自定义) 并实现接口 IErrorCode
-    同时需要创建文件 resources/META-INF/services/com.suyh.base.web.error.IErrorCode 并将该枚举类的完全限定类名写在里面
+    同时需要创建文件 resources/META-INF/services/com.base.web.error.IErrorCode 并将该枚举类的完全限定类名写在里面
     这里的作用是检查所定义的错误码是否有重复的code 值，如果未配置则无法检查错误码重复的问题
     约定 code 在 2000_000 以内的数字留给sdk，业务相关的从 2000_000 开始使用
-3. 全局异常拦截处理已经添加，业务异常直接使用  com.suyh.base.web.exception.ExceptionUtil 即可
+3. 全局异常拦截处理已经添加，业务异常直接使用  com.base.web.exception.ExceptionUtil 即可
     例：throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR)
 4. 数据库脚本
     4.1 支持多数据源以及flywaydb
@@ -65,5 +65,25 @@
             - "/system/user/**"
           packages-to-scan:
             - "com.ruoyi.web.controller"
+9. 审计日志（页面操作日志记录，表：operation_record）
+    自定义审核枚举，实现接口 IAudit，参考 SysWebAuditEnums
+    用法：在需要日志的接口上面添加注解  @AuditOperation
+    具体参考：SysUserController.edit
+    @AuditOperation("@audit.auditRecord(" +
+            "T(com.sys.web.constants.enums.SysWebAuditEnums).SYSTEM_USER_EDIT, " +
+            "#spelReturnValue, #request, #loginUser, " +
+            "#user)")
+    @PutMapping()
+    public AjaxResult edit(
+            @SuppressWarnings("unused") HttpServletRequest request,
+            @Parameter(hidden = true) @CurrLoginUser LoginUser loginUser,
+            @Validated @RequestBody SysUser user) {
+        return toAjax(editUser(loginUser, user));
+    }
+10. 跳过认证
+    10.0 默认情况下，有几种接口是不需要认证的，参考：AbstractAuthenticationInterceptor#ignoreAuthPathPatterns
+    10.1 对于controller 方法，使用注解 @Permit(required = false) 即可。
+    10.2 对于其他方式的，还没实现
+
 
 

@@ -1,6 +1,6 @@
 
 
-com.suyh.ruoyi.web.constants.enums.RuoyiErrorCodeEnums
-com.suyh.sys.web.constants.enums.SysWebErrorCodeEnums
+com.web.ruoyi.constants.enums.RuoyiErrorCodeEnums
+com.web.sys.constants.enums.SysWebErrorCodeEnums
 
 
