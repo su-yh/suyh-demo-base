@@ -1,6 +1,7 @@
 package com.suyh.base.web;
 
 import com.suyh.base.web.advice.StringTrimmerControllerAdvice;
+import com.suyh.base.web.audit.AuditAop;
 import com.suyh.base.web.authentication.interceptor.AuthenticationInterceptor;
 import com.suyh.base.web.configurer.BaseWebMvcConfigurer;
 import com.suyh.base.web.error.BaseErrorAttributes;
@@ -9,6 +10,7 @@ import com.suyh.base.web.response.wrapper.WrapperResponseBodyAdvice;
 import com.suyh.base.web.response.wrapper.WrapperResponseScanPackages;
 import com.suyh.base.web.runner.ErrorCodeDuplicationValidationRunner;
 import com.suyh.base.web.security.SecurityConfiguration;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -70,4 +72,11 @@ public class BaseWebAutoConfiguration {
     public AuthenticationInterceptor authenticationInterceptor() {
         return new AuthenticationInterceptor();
     }
+
+    @Bean
+    public AuditAop auditAop(MessageSource messageSource, BeanFactory beanFactory) {
+        return new AuditAop(messageSource, beanFactory);
+    }
+
+
 }

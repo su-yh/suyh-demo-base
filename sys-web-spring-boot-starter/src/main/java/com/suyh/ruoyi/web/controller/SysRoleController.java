@@ -87,7 +87,7 @@ public class SysRoleController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:role:add')")
 //    @Log(title = "角色管理", businessType = BusinessType.INSERT)
     @AuditOperation("@audit.auditRecord(" +
-            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_ROLE_CREATE, " +
+            "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_ROLE_CREATE, " +
             "#spelReturnValue, #request, #loginUser, " +
             "#role)")
     @PostMapping
@@ -113,7 +113,7 @@ public class SysRoleController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:role:edit')")
 //    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @AuditOperation("@audit.auditRecord(" +
-            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_ROLE_EDIT, " +
+            "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_ROLE_EDIT, " +
             "#spelReturnValue, #request, #loginUser, " +
             "#role)")
     @PutMapping
@@ -183,7 +183,7 @@ public class SysRoleController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:role:remove')")
 //    @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @AuditOperation("@audit.auditRecord(" +
-            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_ROLE_DELETE, " +
+            "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_ROLE_DELETE, " +
             "#spelReturnValue, #request, #loginUser, " +
             "#roleIds)")
     @DeleteMapping("/{roleIds}")

@@ -18,7 +18,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.BeanResolver;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
@@ -29,7 +28,6 @@ import java.util.Locale;
  * @since 2024-10-10
  */
 @Aspect
-@Component
 @Slf4j
 public class AuditAop {
     // i18n 国际化

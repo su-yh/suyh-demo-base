@@ -142,7 +142,7 @@ public class SysUserController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:user:add')")
 //    @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @AuditOperation("@audit.auditRecord(" +
-            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_USER_CREATE, " +
+            "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_USER_CREATE, " +
             "#spelReturnValue, #request, #loginUser, " +
             "#user)")
     @PostMapping()
@@ -173,7 +173,7 @@ public class SysUserController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:user:edit')")
 //    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @AuditOperation("@audit.auditRecord(" +
-            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_USER_EDIT, " +
+            "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_USER_EDIT, " +
             "#spelReturnValue, #request, #loginUser, " +
             "#user)")
     @PutMapping()
@@ -249,7 +249,7 @@ public class SysUserController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:user:remove')")
 //    @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @AuditOperation("@audit.auditRecord(" +
-            "T(com.ebusiness.constant.enums.AuditEnums).SYSTEM_USER_DELETE, " +
+            "T(com.suyh.sys.web.constants.enums.AuditEnums).SYSTEM_USER_DELETE, " +
             "#spelReturnValue, #request, #loginUser, " +
             "#userIds)")
     @DeleteMapping("/{userIds}")
