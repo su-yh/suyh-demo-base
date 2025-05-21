@@ -1,5 +1,6 @@
 package com.base.web;
 
+import com.base.web.advice.BizStringDeserializer;
 import com.base.web.advice.StringTrimmerControllerAdvice;
 import com.base.web.audit.AuditAop;
 import com.base.web.configurer.BaseWebMvcConfigurer;
@@ -30,6 +31,11 @@ public class BaseWebAutoConfiguration {
     @Bean
     public StringTrimmerControllerAdvice stringTrimmerControllerAdvice() {
         return new StringTrimmerControllerAdvice();
+    }
+
+    @Bean
+    public BizStringDeserializer bizStringDeserializer() {
+        return new BizStringDeserializer();
     }
 
     @Bean
