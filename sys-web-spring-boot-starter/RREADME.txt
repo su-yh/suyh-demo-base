@@ -8,6 +8,13 @@
     例：throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR)
 4. 数据库脚本
     4.1 支持多数据源以及flywaydb
+        由于兼容性问题，需要控制flyway-core 的版本号
+                <flyway.version>7.15.0</flyway.version>
+                <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-core</artifactId>
+                    <version>${flyway.version}</version>
+                </dependency>
     4.2 sdk 所需要的用户相关的SQL 存放在目录：classpath:/sqls/mysql/sys/base
         同时sdk 中的flyway 版本文件名采用格式：V00_00_00_XXX__xxxxx.sql 业务相关的版本文件名需要与其区分，不要冲突了
     4.3 如果启用flyway 则需要将 sdk 相关的SQL 目录配置上
