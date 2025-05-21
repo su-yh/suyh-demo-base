@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,7 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 处理用户认证拦截器
@@ -25,17 +28,28 @@ import java.util.List;
 public abstract class AbstractAuthenticationInterceptor implements HandlerInterceptor {
     protected final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    // TODO: suyh - 需要添加一个扩展，支持业务添加忽略认证的接口配置
     /**
      * 对于非业务API 接口忽略认证的API 配置
      * 如果是业务相关的API 接口忽略认证使用注解{@link Permit}
      */
-    protected final List<String> ignoreAuthPathPatterns = Arrays.asList(
+    protected final Set<String> ignoreAuthPathPatterns = new HashSet<>(Arrays.asList(
             // spring mvc 基础错误重定向API 接口
             "/error",
             "/**/*.js", "/**/*.css",
             // knife4j
-            "/doc.html", "/v3/api-docs/**");
+            "/doc.html", "/v3/api-docs/**"));
+
+    public void addIgnoreAuthPathPatterns(Collection<String> pathPatterns) {
+        if (pathPatterns == null) {
+            return;
+        }
+
+        for (String pathPattern : pathPatterns) {
+            if (StringUtils.hasText(pathPattern)) {
+                ignoreAuthPathPatterns.add(pathPattern.trim());
+            }
+        }
+    }
 
     // 这个方法是在访问接口之前执行的，我们只需要在这里写验证登陆状态的业务逻辑，就可以在用户调用指定接口之前验证登陆状态了
     @Override

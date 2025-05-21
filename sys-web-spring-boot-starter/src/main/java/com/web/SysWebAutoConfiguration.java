@@ -1,6 +1,9 @@
 package com.web;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
 import com.web.ruoyi.service.SysPermissionService;
+import com.web.sys.authentication.IgnoreAuthPathPatternProvider;
 import com.web.sys.authentication.interceptor.AuthenticationInterceptor;
 import com.web.sys.configurer.SysWebMvcConfigurer;
 import com.web.sys.constants.SysWebConstants;
@@ -8,9 +11,8 @@ import com.web.sys.filter.TraceFilter;
 import com.web.sys.properties.SysWebProperties;
 import com.web.sys.response.SysWebWrapperResponseScanPackages;
 import com.web.sys.service.UserService;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
-import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -62,8 +64,13 @@ public class SysWebAutoConfiguration {
 
     @Bean
     public AuthenticationInterceptor authenticationInterceptor(
-            UserService userService, SysPermissionService permissionService) {
-        return new AuthenticationInterceptor(userService, permissionService);
+            UserService userService, SysPermissionService permissionService,
+            ObjectProvider<IgnoreAuthPathPatternProvider> objectProvider) {
+        AuthenticationInterceptor authenticationInterceptor = new AuthenticationInterceptor(userService, permissionService);
+        for (IgnoreAuthPathPatternProvider ignoreAuthPathPatternProvider : objectProvider) {
+            authenticationInterceptor.addIgnoreAuthPathPatterns(ignoreAuthPathPatternProvider.getPathPatterns());
+        }
+        return authenticationInterceptor;
     }
 
     @Bean

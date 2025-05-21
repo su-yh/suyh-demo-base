@@ -6,7 +6,7 @@
     约定 code 在 2000_000 以内的数字留给sdk，业务相关的从 2000_000 开始使用
 3. 全局异常拦截处理已经添加，业务异常直接使用  com.base.web.exception.ExceptionUtil 即可
     例：throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR)
-4. 数据库脚本
+4. 数据库
     4.1 支持多数据源以及flywaydb
         由于兼容性问题，需要控制flyway-core 的版本号
                 <flyway.version>7.15.0</flyway.version>
@@ -97,7 +97,7 @@
 10. 跳过认证
     10.0 默认情况下，有几种接口是不需要认证的，参考：AbstractAuthenticationInterceptor#ignoreAuthPathPatterns
     10.1 对于controller 方法，使用注解 @Permit(required = false) 即可。
-    10.2 对于其他方式的，还没实现
+    10.2 对于其他路径，需要实现接口 IgnoreAuthPathPatternProvider 并注册为bean 对象即可。
 
 
 
