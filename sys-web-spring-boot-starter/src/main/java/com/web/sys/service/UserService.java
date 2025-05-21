@@ -8,6 +8,7 @@ import com.web.sys.authentication.user.LoginUser;
 import com.web.sys.constants.enums.SysWebErrorCodeEnums;
 import com.web.sys.properties.SysWebProperties;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
+import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -27,12 +28,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
+    private String base64EncodedSecretKey;
+
     private final GoogleAuthenticator googleAuthenticator;
 
     private final SysWebProperties sysWebProperties;
     private final PasswordEncoder passwordEncoder;
 
     private final SysUserMapper userMapper;
+
+    public String getBase64EncodedSecretKey() {
+        if (base64EncodedSecretKey == null) {
+            synchronized (this) {
+                if (base64EncodedSecretKey == null) {
+                    String tokenSecretKey = sysWebProperties.getUser().getTokenSecretKey();
+                    base64EncodedSecretKey = TextCodec.BASE64.encode(tokenSecretKey);
+                }
+            }
+        }
+
+        return base64EncodedSecretKey;
+    }
 
     public String login(@NonNull String username, @NonNull String password, @NonNull Integer code) {
         SysUser historyEntity = userMapper.selectByUni(username);
@@ -50,7 +66,9 @@ public class UserService {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(LoginUser.NICK_NAME_KEY, historyEntity.getNickname());
-        return TokenUtils.createToken(claims, historyEntity.getId(), username, sysWebProperties.getUser().getTokenSeconds());
+
+        String base64EncodedSecretKey = getBase64EncodedSecretKey();
+        return TokenUtils.createToken(base64EncodedSecretKey, claims, historyEntity.getId(), username, sysWebProperties.getUser().getTokenSeconds());
     }
 
     @Transactional

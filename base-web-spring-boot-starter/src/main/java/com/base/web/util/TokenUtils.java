@@ -15,10 +15,9 @@ import java.util.Map;
  */
 @Slf4j
 public final class TokenUtils {
-    // TODO: suyh - 需要由业务调用方控制
-    private static final String secret = "5bZ2x8D9p4K7QfJ3mN6Lg0C1hR5sT7uV9W";
-
-    public static String createToken(Map<String, Object> claims, Long id, String username, Integer tokenSeconds) {
+    public static String createToken(
+            String base64EncodedSecretKey,
+            Map<String, Object> claims, Long id, String username, Integer tokenSeconds) {
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + tokenSeconds * 1000L);
 
@@ -28,14 +27,14 @@ public final class TokenUtils {
                 .setId(id + "")
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, base64EncodedSecretKey).compact();
     }
 
     @Nullable
-    public static Claims parseToken(String token) {
+    public static Claims parseToken(String base64EncodedSecretKey, String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(secret)
+                    .setSigningKey(base64EncodedSecretKey)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception exception) {

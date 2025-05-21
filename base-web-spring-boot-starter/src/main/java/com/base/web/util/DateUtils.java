@@ -1,4 +1,4 @@
-package com.web.ruoyi.util;
+package com.base.web.util;
 
 import java.time.Instant;
 import java.time.LocalDate;

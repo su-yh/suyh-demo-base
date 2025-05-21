@@ -2,9 +2,9 @@ package com.web.ruoyi.excel.poi;
 
 import com.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.base.web.exception.ExceptionUtil;
+import com.web.ruoyi.excel.RuoyiConvert;
 import com.web.ruoyi.excel.annotation.RuoyiExcel;
 import com.web.ruoyi.excel.annotation.RuoyiExcels;
-import com.web.ruoyi.excel.RuoyiConvert;
 import com.web.ruoyi.excel.date.RuoyiDateUtils;
 import com.web.ruoyi.util.RuoyiFileTypeUtils;
 import com.web.ruoyi.util.RuoyiFileUtils;
@@ -13,6 +13,7 @@ import com.web.ruoyi.util.RuoyiReflectUtils;
 import com.web.ruoyi.util.RuoyiStringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -57,8 +58,6 @@ import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.lang.NonNull;
 
@@ -90,9 +89,8 @@ import java.util.stream.Collectors;
  *
  * @author ruoyi
  */
+@Slf4j
 public class RuoyiExcelUtil<T> {
-    private static final Logger log = LoggerFactory.getLogger(RuoyiExcelUtil.class);
-
     public static final String FORMULA_REGEX_STR = "=|-|\\+|@";
 
     public static final String[] FORMULA_STR = {"=", "-", "+", "@"};

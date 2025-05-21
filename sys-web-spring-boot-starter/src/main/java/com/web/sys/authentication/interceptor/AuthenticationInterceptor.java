@@ -23,7 +23,7 @@ public class AuthenticationInterceptor extends AbstractAuthenticationInterceptor
             return null;
         }
 
-        Claims claims = TokenUtils.parseToken(userToken);
+        Claims claims = TokenUtils.parseToken(userService.getBase64EncodedSecretKey(), userToken);
         if (claims == null) {
             return null;
         }

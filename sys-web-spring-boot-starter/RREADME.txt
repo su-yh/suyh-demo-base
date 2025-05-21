@@ -1,4 +1,7 @@
 
+springboot 的版本：2.7.15
+
+
 1. 如果需要对接口的返回值进行自动封装统一结构，需要实现接口 WrapperResponseScanPackages 并注册为bean 对象
 2. 自定义错误码枚举 ErrorCodeEnums(类名自定义) 并实现接口 IErrorCode
     同时需要创建文件 classpath:/META-INF/services/com.base.web.error.IErrorCode 并将该枚举类的完全限定类名写在里面
@@ -98,6 +101,14 @@
     10.0 默认情况下，有几种接口是不需要认证的，参考：AbstractAuthenticationInterceptor#ignoreAuthPathPatterns
     10.1 对于controller 方法，使用注解 @Permit(required = false) 即可。
     10.2 对于其他路径，需要实现接口 IgnoreAuthPathPatternProvider 并注册为bean 对象即可。
+11. 用户token 密钥配置
+    如果未配置，有一个默认的字符串
+    sys:
+      web:
+        user:
+          token-secret-key: "xxxx"
 
+12. excel 导入导出
+    参考：RuoyiExcelUtil
 
 
