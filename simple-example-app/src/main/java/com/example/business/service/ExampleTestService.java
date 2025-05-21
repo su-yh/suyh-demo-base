@@ -1,5 +1,7 @@
 package com.example.business.service;
 
+import com.base.mp.mybatis.PageParam;
+import com.base.mp.mybatis.PageResult;
 import com.example.business.entity.mysql.business.ExampleTestEntity;
 import com.example.business.mapper.mysql.business.ExampleTestMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,7 @@ import java.util.List;
 public class ExampleTestService {
     private final ExampleTestMapper exampleTestMapper;
 
-    @PostConstruct
-    public void init() {
-        List<ExampleTestEntity> entities = exampleTestMapper.selectList();
-        log.info("size: {}", entities != null ? entities.size() : 0);
+    public PageResult<ExampleTestEntity> pageList(PageParam pageParam) {
+        return exampleTestMapper.pageList(pageParam);
     }
 }
