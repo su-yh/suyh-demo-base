@@ -40,6 +40,7 @@ public class SysLoginController
     public AjaxResult getInfo(@Parameter(hidden = true) @CurrLoginUser LoginUser loginUser)
     {
         SysUser user = loginUser.getUser();
+        user.setTwoFactorAuthKey(null);
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
