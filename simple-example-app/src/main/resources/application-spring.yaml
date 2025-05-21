@@ -1,0 +1,15 @@
+spring:
+  autoconfigure:
+    exclude:
+#      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      # 禁用spring-security 的用户相关的功能
+      # 其主要作用是为 Spring Boot 应用提供默认的用户认证机制
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
+
+
+
+
+
+
+

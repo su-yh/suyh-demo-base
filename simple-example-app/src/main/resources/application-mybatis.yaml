@@ -1,0 +1,6 @@
+
+
+mybatis-plus:
+  mapper-locations: classpath*:/mybatis/**/*.xml
+
+

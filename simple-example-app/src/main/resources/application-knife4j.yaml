@@ -1,0 +1,57 @@
+
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+
+# swagger 页面访问： http://localhost:${server.servlet.context-path}/doc.html
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    # 分组信息也可以在这里配置，在代码的配置类里面配置也是可以的。
+    - group: 'ruoyi-system-user'
+      paths-to-match:
+        - "/system/user/**"
+      packages-to-scan:
+        - "com.web.ruoyi.controller"
+    - group: 'ruoyi-system-online'
+      paths-to-match:
+        - "/system/online/**"
+      packages-to-scan:
+        - "com.web.ruoyi.controller"
+    - group: 'ruoyi-system-role'
+      paths-to-match:
+        - "/system/role/**"
+      packages-to-scan:
+        - "com.web.ruoyi.controller"
+    - group: 'ruoyi-system-menu'
+      paths-to-match:
+        - "/system/menu/**"
+      packages-to-scan:
+        - "com.web.ruoyi.controller"
+    - group: 'user'
+      paths-to-match:
+        - "/user/**"
+      packages-to-scan:
+        - "com.web.sys.controller"
+    - group: 'file-system'
+      paths-to-match:
+        - "/system/file/**"
+      packages-to-scan:
+        - "com.web.sys.controller"
+    - group: 'example-test'
+      paths-to-match:
+        - "/example/test/**"
+      packages-to-scan:
+        - "com.example.business.controller"
+
+
+
+

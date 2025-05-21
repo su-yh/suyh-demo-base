@@ -1,0 +1,6 @@
+logging:
+  file:
+    path: "/tmp/simple-example"
+    name: "simple-example"
+
+
