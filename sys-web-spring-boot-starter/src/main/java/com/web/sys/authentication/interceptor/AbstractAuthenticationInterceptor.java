@@ -135,12 +135,12 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
 //        String nickname = claims.get(TokenUtils.NICK_NAME_KEY, String.class);
 //        if (username == null || strId == null || nickname == null) {
 //            log.error("claims value null, username: {}, id: {}, nickname: {}", username, strId, nickname);
-//            throw ExceptionUtil.business(ErrorCodeConstants.SERVICE_ERROR);
+//            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
 //        }
 //
 //        if (userService == null) {
 //            log.error("{} bean is null", SysUserService.class.getSimpleName());
-//            throw ExceptionUtil.business(ErrorCodeConstants.SERVICE_ERROR);
+//            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
 //        }
 //
 //        long id = Long.parseLong(strId);

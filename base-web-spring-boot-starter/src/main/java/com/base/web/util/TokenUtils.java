@@ -38,7 +38,7 @@ public final class TokenUtils {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception exception) {
-            log.error("token parse failed. token: {}, message: {}", token, exception.getMessage());
+            log.warn("token parse failed. token: {}, message: {}", token, exception.getMessage());
             return null;
         }
     }

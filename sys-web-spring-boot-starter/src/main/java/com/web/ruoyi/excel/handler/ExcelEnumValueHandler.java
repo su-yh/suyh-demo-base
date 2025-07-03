@@ -32,12 +32,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ExcelEnumValueHandler implements RuoyiExcelHandlerAdapter {
     public static final String MESSAGE_PREFIX = "excel.field.enum";
+    public static MessageSource MESSAGE_SOURCE;
 
     private static final ReflectorFactory REFLECTOR_FACTORY = new DefaultReflectorFactory();
     private static final Map<String, String> TABLE_METHOD_OF_ENUM_TYPES = new ConcurrentHashMap<>();
 
     @Override
-    public Object format(Object value, MessageSource messageSource, Locale locale, String[] args, Cell cell, Workbook wb) {
+    public Object format(Object value, Locale locale, String[] args, Cell cell, Workbook wb) {
         if (value == null) {
             return null;
         }
@@ -49,7 +50,7 @@ public class ExcelEnumValueHandler implements RuoyiExcelHandlerAdapter {
         }
 
         Enum<?> en = (Enum<?>) value;
-        if (messageSource == null) {
+        if (MESSAGE_SOURCE == null) {
             return en.name();
         }
 
@@ -68,7 +69,7 @@ public class ExcelEnumValueHandler implements RuoyiExcelHandlerAdapter {
         // 国际化对应的code
         Object codeSuffix = getValue(getInvoker, en);
         String messageCode = String.format("%s.%s.%s", MESSAGE_PREFIX, excelEnumMessageCategory.value(), codeSuffix);
-        return messageSource.getMessage(messageCode, null, en.name(), locale);
+        return MESSAGE_SOURCE.getMessage(messageCode, null, en.name(), locale);
     }
 
     private Object getValue(Invoker getInvoker, Object e) {

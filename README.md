@@ -1,5 +1,15 @@
 
 
+整体的使用，参考示例项目：`simple-example-app`
+
+
+
+
+
+
+
+管理员初始帐号/密码：==admin/admin==
+
 
 
 1. springboot 的版本：2.7.15
@@ -10,7 +20,7 @@
 
    同时需要创建文件 `classpath:/META-INF/services/com.base.web.error.IErrorCode` 并将该枚举类的完全限定类名写在里面
    这里的作用是检查所定义的错误码是否有重复的code 值，如果未配置则无法检查错误码重复的问题
-   ==约定 code 在 2000_000 以内的数字留给sdk，业务相关的从 2000_000 开始使用==
+   ==约定 code 在 2,000,000 以内的数字留给sdk，业务相关的从 2,000,000 开始使用==
 
 4. 国际化配置
 
@@ -20,11 +30,12 @@
    spring:
      messages:
        # 要使用MessageSource 我们应该要提供 一个对应 的配置文件 。
+       # 当前SDK 中，使用的目录是："messages"
        basename: "messages,i18n/messages"
        fallback-to-system-locale: false
    ```
 
-5. 全局异常拦截处理已经添加，业务异常直接使用  `com.base.web.exception.ExceptionUtil` 即可，示例如下：
+5. 全局异常拦截处理已经添加，业务异常直接使用  `com.base.web.exception.ExceptionUtil` ，示例如下：
 
    ```java
    throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR)
@@ -174,7 +185,28 @@
 
 13. excel 导入导出
 
-    参考：`RuoyiExcelUtil`
+14. 参考：`RuoyiExcelUtil`
+
+15. 菜单历史记录
+
+    首个版本见：`sys-menu-v0.0.0.txt`
+
+    ```sql
+    -- 菜单表数据，用于每次版本升级对菜单调整的对比。
+    SELECT 
+      menu_id, menu_name, parent_id, order_num, path, component, query, 
+      route_name, is_frame, is_cache, menu_type, visible, status, perms, 
+      icon, remark, menu_key
+    FROM sys_menu
+    ORDER BY 
+      menu_id, menu_name, parent_id, order_num, path, component, query, 
+      route_name, is_frame, is_cache, menu_type, visible, status, perms, 
+      icon, remark, menu_key;
+    ```
+
+    
+
+    
 
 
 

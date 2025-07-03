@@ -1,5 +1,6 @@
 package com.base.mp.mybatis;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,12 @@ public class PageParam implements Serializable {
     // 每页条数不能为空
     // 每页条数最小值为 1
     private Integer pageSize = PAGE_SIZE;
+
+    /**
+     * 是否进行 count 查询
+     */
+    @JsonIgnore
+    protected boolean searchCount = true;
 
     @JsonIgnore
     public int getPageStart() {
@@ -51,5 +58,11 @@ public class PageParam implements Serializable {
         }
 
         return list.subList(startIndex, lastIndex);
+    }
+
+    public <T> Page<T> toPage() {
+        Page<T> page = new Page<>(getPageNo(), getPageSize());
+        page.setSearchCount(searchCount);
+        return page;
     }
 }

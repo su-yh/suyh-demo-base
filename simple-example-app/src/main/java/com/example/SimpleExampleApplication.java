@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.bytecodes.MybatisSqlDetailText;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SimpleExampleApplication {
     public static void main(String[] args) {
+        MybatisSqlDetailText.rebuildSqlDetail();
         SpringApplication.run(SimpleExampleApplication.class, args);
     }
 }

@@ -11,9 +11,10 @@ import com.web.ruoyi.util.RuoyiFileUtils;
 import com.web.ruoyi.util.RuoyiImageUtils;
 import com.web.ruoyi.util.RuoyiReflectUtils;
 import com.web.ruoyi.util.RuoyiStringUtils;
+import com.web.sys.authentication.user.LoginUser;
+import com.web.sys.excel.export.ExcelExport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -58,12 +59,15 @@ import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.lang.NonNull;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -89,8 +93,9 @@ import java.util.stream.Collectors;
  *
  * @author ruoyi
  */
-@Slf4j
 public class RuoyiExcelUtil<T> {
+    private static final Logger log = LoggerFactory.getLogger(RuoyiExcelUtil.class);
+
     public static final String FORMULA_REGEX_STR = "=|-|\\+|@";
 
     public static final String[] FORMULA_STR = {"=", "-", "+", "@"};
@@ -258,8 +263,9 @@ public class RuoyiExcelUtil<T> {
                 Field field = vo.getField();
                 RuoyiExcel attr = vo.getAnno();
 
+                String title = MESSAGE_SOURCE != null ? MESSAGE_SOURCE.getMessage(attr.nameCode(), null, attr.name(), locale) : attr.name();
                 Cell cell = subRow.createCell(indexColumn);
-                cell.setCellValue(attr.name());
+                cell.setCellValue(title);
                 cell.setCellStyle(styles.get(RuoyiStringUtils.format("header_{}_{}", attr.headerColor(), attr.headerBackgroundColor())));
 
                 if (Collection.class.isAssignableFrom(field.getType())) {
@@ -463,8 +469,10 @@ public class RuoyiExcelUtil<T> {
      * @param response  返回数据
      * @param list      导出数据集合
      * @param sheetName 工作表的名称
-     * @return 结果
+     * @deprecated 使用 {@link ExcelExport#listExport(LoginUser, String, String, HttpServletResponse, List)}
+     * @see ExcelExport
      */
+    @Deprecated
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
         exportExcel(response, list, sheetName, RuoyiStringUtils.EMPTY);
     }
@@ -478,6 +486,7 @@ public class RuoyiExcelUtil<T> {
      * @param title     标题
      * @return 结果
      */
+    @Deprecated
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String title) {
         if (response != null) {
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -529,10 +538,24 @@ public class RuoyiExcelUtil<T> {
      *
      * @return 结果
      */
+    @Deprecated
     public void exportExcel(HttpServletResponse response) {
         try {
             writeSheet();
             wb.write(response.getOutputStream());
+        } catch (Exception e) {
+            log.error("导出Excel异常", e);
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+        } finally {
+            IOUtils.closeQuietly(wb);
+        }
+    }
+
+    @Deprecated
+    public void exportExcel(OutputStream os) {
+        try {
+            writeSheet();
+            wb.write(os);
         } catch (Exception e) {
             log.error("导出Excel异常", e);
             throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
@@ -835,7 +858,7 @@ public class RuoyiExcelUtil<T> {
         // 创建列
         Cell cell = row.createCell(column);
         // 写入列信息
-        String title = MESSAGE_SOURCE.getMessage(attr.nameCode(), null, attr.name(), locale);
+        String title = MESSAGE_SOURCE != null ? MESSAGE_SOURCE.getMessage(attr.nameCode(), null, attr.name(), locale) : attr.name();
         cell.setCellValue(title);
         setDataValidation(attr, row, column);
         cell.setCellStyle(styles.get(RuoyiStringUtils.format("header_{}_{}", attr.headerColor(), attr.headerBackgroundColor())));

@@ -4,7 +4,6 @@ import com.web.ruoyi.excel.poi.RuoyiExcelHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.context.MessageSource;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -17,7 +16,7 @@ import java.util.Locale;
 @Slf4j
 public class BigDecimalRateHandler implements RuoyiExcelHandlerAdapter {
     @Override
-    public Object format(Object value, MessageSource messageSource, Locale locale, String[] args, Cell cell, Workbook wb) {
+    public Object format(Object value, Locale locale, String[] args, Cell cell, Workbook wb) {
         if (value == null) {
             return null;
         }

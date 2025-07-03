@@ -12,6 +12,7 @@ public enum BaseWebErrorCodeEnums implements IErrorCode {
     ACCESS_DENIED(1000403, "禁止访问"),
     NO_IMPLEMENT(1000404, "功能代码还未实现"),
     SERVICE_ERROR(1000500, "服务错误"),
+    SYSTEM_UNSUPPORTED(1000601, "Not Supported: {0}"),
 
     ;
 
