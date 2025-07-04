@@ -8,6 +8,7 @@ import com.base.web.error.IErrorCode;
  */
 public enum SysWebErrorCodeEnums implements IErrorCode {
     PARAMETER_ERROR(1015001, "参数错误"),
+    PARAMETER_ERROR_PARAM(1015002, "参数错误：{0}"),
     USER_NOT_LOGIN(1015005, "未登录"),
     TOKEN_ERROR_OR_EXPIRE(1015006, "无效token"),
     USER_EXISTS(1015007, "用户({0}) 已存在"),
