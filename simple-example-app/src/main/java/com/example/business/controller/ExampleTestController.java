@@ -2,8 +2,10 @@ package com.example.business.controller;
 
 import com.base.mp.mybatis.PageParam;
 import com.base.mp.mybatis.PageResult;
+import com.base.web.exception.ExceptionUtil;
 import com.example.business.entity.mysql.business.ExampleTestEntity;
 import com.example.business.service.ExampleTestService;
+import com.example.constant.enums.ErrorCodeEnums;
 import com.web.sys.authentication.annotation.Permit;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,9 @@ public class ExampleTestController {
     @Permit(required = false)
     @GetMapping("/pageList")
     public PageResult<ExampleTestEntity> pageList(PageParam pageParam) {
+        if (true) {
+            throw ExceptionUtil.business(ErrorCodeEnums.UNKNOWN_ERROR, "params");
+        }
         return exampleTestService.pageList(pageParam);
     }
 }

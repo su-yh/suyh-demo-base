@@ -73,7 +73,7 @@ public class BaseErrorAttributes extends DefaultErrorAttributes {
 
             String messageSourceCode = IErrorCode.ERROR_CODE_PREFIX + "." + ec.getCode();
             Locale locale = webRequest.getLocale();
-            String message = messageSource.getMessage(messageSourceCode, params, "messages.properties lost id: " + messageSourceCode, locale);
+            String message = messageSource.getMessage(messageSourceCode, params, ec.getMsg(), locale);
             errorAttributes.put("code", ec.getCode());
             errorAttributes.put("message", message);
         }

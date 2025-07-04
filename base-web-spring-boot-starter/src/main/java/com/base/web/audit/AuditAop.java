@@ -62,7 +62,7 @@ public class AuditAop {
         } catch (AbstractBusinessException e) {
             String messageSourceCode = IErrorCode.ERROR_CODE_PREFIX + "." + e.getEc().getCode();
             spelReturnValue = messageSource.getMessage(messageSourceCode, e.getParams(),
-                    "messages.properties lost id: " + messageSourceCode, Locale.SIMPLIFIED_CHINESE);
+                    e.getMessage(), Locale.SIMPLIFIED_CHINESE);
             exp = e;
         } catch (Exception e) {
             spelReturnValue = R.ofFail(BaseWebErrorCodeEnums.SERVICE_ERROR.getCode(), e.getMessage());

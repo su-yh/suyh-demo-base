@@ -7,6 +7,7 @@ import com.base.web.error.IErrorCode;
  * @since 2025-05-16
  */
 public enum ErrorCodeEnums implements IErrorCode {
+    UNKNOWN_ERROR(3001001, "Unknown Error：{0}"),
 
     ;
 

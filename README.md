@@ -35,6 +35,8 @@
        fallback-to-system-locale: false
    ```
 
+   如果配置文件中找不到对应的key，则直接使用代码中枚举对应的msg。
+
 5. 全局异常拦截处理已经添加，业务异常直接使用  `com.base.web.exception.ExceptionUtil` ，示例如下：
 
    ```java
