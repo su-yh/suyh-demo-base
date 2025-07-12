@@ -28,7 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private String base64EncodedSecretKey;
+    private volatile String base64EncodedSecretKey;
 
     private final GoogleAuthenticator googleAuthenticator;
 
