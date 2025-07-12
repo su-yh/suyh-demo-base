@@ -1,5 +1,6 @@
 package com.base.mp;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusInnerInterceptorAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.base.mp.handler.SqlHandler;
 import com.base.mp.properties.BaseMybatisPlusProperties;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Bean;
  */
 @ConditionalOnProperty(prefix = BaseMybatisPlusProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(BaseMybatisPlusProperties.class)
-@AutoConfiguration
+@AutoConfiguration(before = MybatisPlusInnerInterceptorAutoConfiguration.class)
 public class BaseMybatisPlusAutoConfiguration {
 
     @ConditionalOnProperty(prefix = BaseMybatisPlusProperties.PREFIX, name = "sql.enabled", havingValue = "true", matchIfMissing = true)
