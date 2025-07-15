@@ -12,7 +12,7 @@ import com.web.ruoyi.mybatis.mapper.SysUserMapper;
 import com.web.ruoyi.mybatis.mapper.SysUserRoleMapper;
 import com.web.ruoyi.service.ISysUserService;
 import com.web.ruoyi.util.RuoyiStringUtils;
-import com.web.sys.service.UserService;
+import com.web.sys.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class SysUserServiceImpl implements ISysUserService
 {
     @Resource
-    private UserService customUserService;
+    private IUserService userService;
 
     @Autowired
     private SysUserMapper userMapper;
@@ -259,7 +259,7 @@ public class SysUserServiceImpl implements ISysUserService
     public int insertUser(SysUser user)
     {
         // 新增用户信息
-        int rows = customUserService.createUser(user);
+        int rows = userService.createUser(user);
 //        // 新增用户岗位关联
 //        insertUserPost(user);
         // 新增用户与角色管理

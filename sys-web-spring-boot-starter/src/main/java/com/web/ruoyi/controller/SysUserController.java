@@ -12,7 +12,7 @@ import com.web.ruoyi.service.ISysUserService;
 import com.web.ruoyi.util.RuoyiStringUtils;
 import com.web.sys.authentication.annotation.CurrLoginUser;
 import com.web.sys.authentication.user.LoginUser;
-import com.web.sys.service.UserService;
+import com.web.sys.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,10 +52,10 @@ import java.util.stream.Collectors;
 public class SysUserController extends BaseController
 {
     @Resource
-    private UserService customUserService;
+    private IUserService userService;
 
     @Autowired
-    private ISysUserService userService;
+    private ISysUserService sysUserService;
 
     @Autowired
     private ISysRoleService roleService;
@@ -75,7 +75,7 @@ public class SysUserController extends BaseController
             SysUser user)
     {
         startPage();
-        List<SysUser> list = userService.selectUserList(user);
+        List<SysUser> list = sysUserService.selectUserList(user);
         if (list != null) {
             for (SysUser sysUser : list) {
                 List<SysRole> sysRoles = roleService.selectRolePermissionListByUserId(sysUser.getUserId());
@@ -128,7 +128,7 @@ public class SysUserController extends BaseController
 //        ajax.put("posts", postService.selectPostAll());
         if (RuoyiStringUtils.isNotNull(userId))
         {
-            SysUser sysUser = userService.selectUserById(userId);
+            SysUser sysUser = sysUserService.selectUserById(userId);
             ajax.put(AjaxResult.DATA_TAG, sysUser);
 //            ajax.put("postIds", postService.selectPostListByUserId(userId));
             ajax.put("roleIds", sysUser.getRoles().stream().map(SysRole::getRoleId).collect(Collectors.toList()));
@@ -153,17 +153,17 @@ public class SysUserController extends BaseController
     {
 //        deptService.checkDeptDataScope(user.getDeptId());
 //        roleService.checkRoleDataScope(user.getRoleIds());
-        if (!userService.checkUserNameUnique(user)) {
+        if (!sysUserService.checkUserNameUnique(user)) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_CREATE_USERNAME_EXISTS, user.getUsername());
         }
-        if (RuoyiStringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
+        if (RuoyiStringUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_CREATE_PHONE_NUMBER_EXISTS, user.getUsername());
         }
-        if (RuoyiStringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
+        if (RuoyiStringUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_CREATE_EMAIL_EXISTS, user.getUsername());
         }
 
-        userService.insertUser(user);
+        sysUserService.insertUser(user);
         return success();
     }
 
@@ -202,7 +202,7 @@ public class SysUserController extends BaseController
     public AjaxResult updatePwdSelf(
             @Parameter(hidden = true) @CurrLoginUser LoginUser loginUser,
             @RequestBody @Validated UserUpdatePassword body) {
-        customUserService.updatePwdByOldValue(loginUser.getId(), body.getOldPassword(), body.getNewPassword());
+        userService.updatePwdByOldValue(loginUser.getId(), body.getOldPassword(), body.getNewPassword());
         return success();
     }
 
@@ -224,13 +224,13 @@ public class SysUserController extends BaseController
     }
 
     private int editUser(LoginUser loginUser, SysUser user) {
-        if (!userService.checkUserNameUnique(user)) {
+        if (!sysUserService.checkUserNameUnique(user)) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_EDIT_USERNAME_EXISTS, user.getUsername());
         }
-        if (RuoyiStringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)) {
+        if (RuoyiStringUtils.isNotEmpty(user.getPhonenumber()) && !sysUserService.checkPhoneUnique(user)) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_EDIT_PHONE_NUMBER_EXISTS, user.getUsername());
         }
-        if (RuoyiStringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user)) {
+        if (RuoyiStringUtils.isNotEmpty(user.getEmail()) && !sysUserService.checkEmailUnique(user)) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_EDIT_EMAIL_EXISTS, user.getUsername());
         }
 
@@ -240,7 +240,7 @@ public class SysUserController extends BaseController
         user.setTwoFactorAuthKey(null);
 
         user.setUpdateBy(loginUser.getNickname());
-        return userService.updateUser(user);
+        return sysUserService.updateUser(user);
     }
 
     /**
@@ -261,7 +261,7 @@ public class SysUserController extends BaseController
         if (ArrayUtils.contains(userIds, loginUser.getId())) {
             throw ExceptionUtil.business(RuoyiErrorCodeEnums.RUOYI_SYSTEM_USER_DELETE_FAILED);
         }
-        return toAjax(userService.deleteUserByIds(userIds));
+        return toAjax(sysUserService.deleteUserByIds(userIds));
     }
 
     /**
@@ -274,7 +274,7 @@ public class SysUserController extends BaseController
     {
 //        userService.checkUserAllowed(user);
 //        userService.checkUserDataScope(user.getUserId());
-        customUserService.updateUserPwd(user.getId(), user.getPassword());
+        userService.updateUserPwd(user.getId(), user.getPassword());
         return success();
     }
 
@@ -291,7 +291,7 @@ public class SysUserController extends BaseController
 //        userService.checkUserAllowed(user);
 //        userService.checkUserDataScope(user.getUserId());
         user.setUpdateBy(loginUser.getNickname());
-        return toAjax(userService.updateUserStatus(user));
+        return toAjax(sysUserService.updateUserStatus(user));
     }
 
     /**
@@ -302,7 +302,7 @@ public class SysUserController extends BaseController
     public AjaxResult authRole(@PathVariable("userId") Long userId)
     {
         AjaxResult ajax = AjaxResult.success();
-        SysUser user = userService.selectUserById(userId);
+        SysUser user = sysUserService.selectUserById(userId);
         List<SysRole> roles = roleService.selectRolesByUserId(userId);
         ajax.put("user", user);
         ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
@@ -319,7 +319,7 @@ public class SysUserController extends BaseController
     {
 //        userService.checkUserDataScope(userId);
 //        roleService.checkRoleDataScope(roleIds);
-        userService.insertUserAuth(userId, roleIds);
+        sysUserService.insertUserAuth(userId, roleIds);
         return success();
     }
 

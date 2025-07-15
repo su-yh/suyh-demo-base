@@ -53,6 +53,7 @@ public class UserService implements IUserService {
         return base64EncodedSecretKey;
     }
 
+    @Override
     public String login(@NonNull String username, @NonNull String password, @NonNull Integer code) {
         SysUser historyEntity = userMapper.selectByUni(username);
         if (historyEntity == null) {
@@ -116,6 +117,7 @@ public class UserService implements IUserService {
         return userMapper.selectUserById(userId);
     }
 
+    @Override
     @Transactional
     public void updateUserPwd(@NonNull Long userId, @NonNull String password) {
         SysUser historyEntity = obtainUserById(userId);
@@ -134,6 +136,7 @@ public class UserService implements IUserService {
         userMapper.updateUser(user);
     }
 
+    @Override
     @Transactional
     public String resetTwoFactorAuthKey(@NonNull Long id) {
         SysUser historyEntity = obtainUserById(id);
@@ -160,6 +163,7 @@ public class UserService implements IUserService {
         return entity;
     }
 
+    @Override
     @Transactional
     public void updatePwdByOldValue(
             @NonNull Long userId, @NonNull String oldPassword, @NonNull String newPassword) {
