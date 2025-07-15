@@ -10,10 +10,12 @@ import com.web.sys.constants.SysWebConstants;
 import com.web.sys.filter.TraceFilter;
 import com.web.sys.properties.SysWebProperties;
 import com.web.sys.response.SysWebWrapperResponseScanPackages;
+import com.web.sys.service.IUserService;
 import com.web.sys.service.UserService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +39,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 })
 @AutoConfiguration
 public class SysWebAutoConfiguration {
+    @ConditionalOnMissingBean(IUserService.class)
+    @Bean
+    public IUserService userService() {
+        return new UserService();
+    }
+
     @Bean
     public TraceFilter traceFilter() {
         return new TraceFilter();
@@ -64,7 +72,7 @@ public class SysWebAutoConfiguration {
 
     @Bean
     public AuthenticationInterceptor authenticationInterceptor(
-            UserService userService, SysPermissionService permissionService,
+            IUserService userService, SysPermissionService permissionService,
             ObjectProvider<IgnoreAuthPathPatternProvider> objectProvider) {
         AuthenticationInterceptor authenticationInterceptor = new AuthenticationInterceptor(userService, permissionService);
         for (IgnoreAuthPathPatternProvider ignoreAuthPathPatternProvider : objectProvider) {

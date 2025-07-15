@@ -5,7 +5,7 @@ import com.base.web.exception.ExceptionUtil;
 import com.base.web.user.AbstractLoginUser;
 import com.web.ruoyi.mybatis.entity.SysUser;
 import com.web.ruoyi.service.SysPermissionService;
-import com.web.sys.service.UserService;
+import com.web.sys.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
@@ -15,7 +15,7 @@ import java.util.Set;
 public class LoginUser extends AbstractLoginUser {
     public static final String NICK_NAME_KEY = "nickname";
 
-    public LoginUser(UserService userService, SysPermissionService permissionService, Long id, String username, String nickname) {
+    public LoginUser(IUserService userService, SysPermissionService permissionService, Long id, String username, String nickname) {
         super(id, username, nickname);
 
         if (userService == null || id == null || username == null || nickname == null) {
@@ -29,7 +29,7 @@ public class LoginUser extends AbstractLoginUser {
 
     }
 
-    private final UserService userService;
+    private final IUserService userService;
     private final SysPermissionService permissionService;
 
 

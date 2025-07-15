@@ -2,20 +2,20 @@ package com.web.sys.service;
 
 import com.base.web.exception.ExceptionUtil;
 import com.base.web.util.TokenUtils;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.web.ruoyi.mybatis.entity.SysUser;
 import com.web.ruoyi.mybatis.mapper.SysUserMapper;
 import com.web.sys.authentication.user.LoginUser;
 import com.web.sys.constants.enums.SysWebErrorCodeEnums;
 import com.web.sys.properties.SysWebProperties;
-import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -24,19 +24,22 @@ import java.util.UUID;
  * @author suyh
  * @since 2024-08-31
  */
-@Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
-    private String base64EncodedSecretKey;
+public class UserService implements IUserService {
+    protected String base64EncodedSecretKey;
 
-    private final GoogleAuthenticator googleAuthenticator;
+    @Resource
+    protected GoogleAuthenticator googleAuthenticator;
 
-    private final SysWebProperties sysWebProperties;
-    private final PasswordEncoder passwordEncoder;
+    @Resource
+    protected SysWebProperties sysWebProperties;
+    @Resource
+    protected PasswordEncoder passwordEncoder;
+    @Resource
+    protected SysUserMapper userMapper;
 
-    private final SysUserMapper userMapper;
-
+    @Override
     public String getBase64EncodedSecretKey() {
         if (base64EncodedSecretKey == null) {
             synchronized (this) {
@@ -93,7 +96,7 @@ public class UserService {
         return userMapper.insertUser(sysUser);
     }
 
-    private void validUser2Fa(String twoFactorAuthKey, Integer codeFa) {
+    protected void validUser2Fa(String twoFactorAuthKey, Integer codeFa) {
         if (!sysWebProperties.getUser().getCaptcha().isTwoFactorAuthEnabled()) {
             return;
         }
@@ -104,6 +107,7 @@ public class UserService {
         }
     }
 
+    @Override
     public SysUser obtainUserById(Long userId) {
         if (userId == null) {
             return null;

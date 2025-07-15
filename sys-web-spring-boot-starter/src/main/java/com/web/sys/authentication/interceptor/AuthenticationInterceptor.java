@@ -5,7 +5,7 @@ import com.base.web.exception.ExceptionUtil;
 import com.base.web.util.TokenUtils;
 import com.web.ruoyi.service.SysPermissionService;
 import com.web.sys.authentication.user.LoginUser;
-import com.web.sys.service.UserService;
+import com.web.sys.service.IUserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationInterceptor extends AbstractAuthenticationInterceptor {
-    private final UserService userService;
+    private final IUserService userService;
     private final SysPermissionService permissionService;
 
     @Override
