@@ -28,7 +28,7 @@ public class FieldDetail {
      * 3.2 List或者数组 中的模板元素类型是复合数据类型
      * <p>
      * 所以，首先应该判断是否为List 或者数组
-     *
+     * <p>
      * 如果该字段是最小解析单元，才会有值，否则为null
      */
     private final ExcelHandlerAdapter adapterInstance;
@@ -40,6 +40,12 @@ public class FieldDetail {
 
     @Setter
     private Integer colIndex;   // 该元素所在列，如果列有合并，则该值为最左列
+
+    /**
+     * 标记当前字段是否需要被导出
+     */
+    @Setter
+    private boolean exportFlag = true;
 
     public boolean isMinParseUnit() {
         return anno.minParseUnit();

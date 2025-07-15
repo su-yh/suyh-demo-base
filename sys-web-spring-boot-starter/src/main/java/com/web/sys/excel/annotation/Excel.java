@@ -39,6 +39,11 @@ public @interface Excel {
     IndexedColors headerColor() default IndexedColors.WHITE;
 
     /**
+     * 是否使用父元素的style 应用到标题头
+     */
+    boolean useParentHeaderStyle() default true;
+
+    /**
      * 自定义数据处理器
      */
     Class<? extends ExcelHandlerAdapter> handler() default ExcelHandlerAdapter.class;

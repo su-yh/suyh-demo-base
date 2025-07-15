@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 
 /**
  * 验证码配置
- * 
+ *
  * @author ruoyi
  */
 @ConditionalOnProperty(prefix = BaseMybatisPlusProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)

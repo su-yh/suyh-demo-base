@@ -8,6 +8,7 @@ import com.web.sys.excel.handler.ExcelHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.context.MessageSource;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class ExcelCellHandlerDate implements ExcelHandlerAdapter {
     private static final String DATE_FORMAT_DEFAULT = "yyyy-MM-dd HH:mm:ss";
 
     @Override
-    public void serializable(Workbook wb, Cell cell, Locale locale, Object cellObj, String argsJson) {
+    public void serializable(Workbook wb, Cell cell, MessageSource messageSource, Locale locale, Object cellObj, String argsJson) {
         if (cellObj == null) {
             return;
         }

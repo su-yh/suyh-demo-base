@@ -1,5 +1,8 @@
 package com.web.sys.excel.export;
 
+import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
+import com.baomidou.mybatisplus.core.toolkit.support.LambdaMeta;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.base.mp.mybatis.PageParam;
 import com.base.mp.mybatis.PageResult;
 import com.base.web.constants.enums.BaseWebErrorCodeEnums;
@@ -9,8 +12,10 @@ import com.web.sys.excel.annotation.Excel;
 import com.web.sys.excel.handler.ExcelHandlerAdapter;
 import com.web.sys.excel.util.ExcelUtils;
 import com.web.sys.excel.vo.FieldDetail;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -37,14 +42,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Excel相关处理
@@ -84,6 +86,7 @@ public class ExcelExport<T> {
     /**
      * 注解列表（树型结构）：所有属性的字段以及对应的注解
      */
+    @Getter
     private List<FieldDetail> fieldDetailList;
 
     // 标题一共占用几行
@@ -99,10 +102,7 @@ public class ExcelExport<T> {
      */
     private final Class<T> clazz;
 
-    /**
-     * 需要排除列属性
-     */
-    private String[] excludeFields;
+    private final List<SFunction<?, ?>[]> exclude = new ArrayList<>();
 
     private final Locale locale;
 
@@ -256,6 +256,9 @@ public class ExcelExport<T> {
         List<Cell> mergeList = new ArrayList<>();
         boolean multiRowFlag = false;
         for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
             Excel anno = fieldDetail.getAnno();
 
             Cell rowTitleCell = row.createCell(colNum);
@@ -266,13 +269,15 @@ public class ExcelExport<T> {
             rowTitleCell.setCellValue(title);
 
             CellStyle titleStyle = createTitleCellStyle(anno);
-            if (parentTitleStyle != null) {
-                // 使用父元素相同的背景色与文字颜色
+            if (parentTitleStyle != null && anno.useParentHeaderStyle()) { // 使用父元素相同的背景色与文字颜色
+                // 父元素
                 Font parentFont = wb.getFontAt(parentTitleStyle.getFontIndexAsInt());
 
+                // 字体
                 Font curFont = wb.getFontAt(titleStyle.getFontIndexAsInt());
                 curFont.setColor(parentFont.getColor());
 
+                // 背景色
                 titleStyle.setFillForegroundColor(parentTitleStyle.getFillForegroundColor());
             }
 
@@ -371,6 +376,9 @@ public class ExcelExport<T> {
 
         int rowCount = 1;
         for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
             Field field = fieldDetail.getField();
 
             field.setAccessible(true);
@@ -442,7 +450,7 @@ public class ExcelExport<T> {
             CellStyle cellStyle = obtainDataCellStyle();
             Cell cell = childRow.createCell(fieldDetail.getColIndex());
             cell.setCellStyle(cellStyle);
-            adapterInstance.serializable(wb, cell, locale, element, excelAnn.argsJson());
+            adapterInstance.serializable(wb, cell, MESSAGE_SOURCE, locale, element, excelAnn.argsJson());
 
             if (mergeCellList != null) {
                 mergeCellList.add(cell);
@@ -490,23 +498,67 @@ public class ExcelExport<T> {
     }
 
     private void initFieldDetail() {
+        if (fieldDetailList != null) {
+            return;
+        }
+
         this.fieldDetailList = ExcelUtils.parseFieldDetail(clazz);
-        // 如果有需要排除的字段
-        if (excludeFields != null && excludeFields.length > 0) {
-            Set<String> excludeSet = Arrays.stream(excludeFields).collect(Collectors.toSet());
-            // 过滤掉需要排除的字段
-            fieldDetailList = this.fieldDetailList.stream()
-                    .filter(fd -> !excludeSet.contains(fd.getField().getName()))
-                    .collect(Collectors.toList());
+
+        for (SFunction<?, ?>[] sf : exclude) {
+            doExcludeField(this.fieldDetailList, sf, 0);
         }
 
         ExcelUtils.orderFieldList(this.fieldDetailList, 0);
     }
 
-
-    public final void setExcludeFields(String... fieldGetters) {
-        this.excludeFields = fieldGetters;
+    /**
+     * 一次添加一个要导出的字段，从第一层开始，如果有多层，则一个一个往下写。
+     * <pre><code>
+     * excelExport.addExcludeField(
+     *         (SFunction<ExportDto, ?>) ExportDto::getDetail,
+     *         (SFunction<ExportDetailDto, ?>) ExportDetailDto::getDetailDto02,
+     *         (SFunction<ExportDetailDto02, ?>) ExportDetailDto02::getDto03,
+     *         (SFunction<ExportDetailDto03, ?>) ExportDetailDto03::getExportField
+     * );
+     * </code></pre>
+     */
+    public void addExcludeField(SFunction<?, ?>... fields) {
+        exclude.add(fields);
     }
 
+    private void doExcludeField(List<FieldDetail> details, SFunction<?, ?>[] fields, int index) {
+        if (fields == null || fields.length == 0) {
+            return;
+        }
+        if (details == null || details.isEmpty()) {
+            throw new RuntimeException("details is empty");
+        }
 
+        SFunction<?, ?> field = fields[index];
+        LambdaMeta meta = LambdaUtils.extract(field);
+        String fieldName = PropertyNamer.methodToProperty(meta.getImplMethodName());
+
+        FieldDetail detailMatch = null;
+        for (FieldDetail detail : details) {
+            if (detail.getField().getName().equals(fieldName)) {
+                detailMatch = detail;
+                break;
+            }
+        }
+
+        if (detailMatch == null) {
+            throw new RuntimeException("MISMATCH");
+        }
+
+        // System.out.printf("fieldName: %s, className: %s%n", fieldName, detailMatch.getFieldClass());
+
+        int nextIndex = index + 1;
+        if (nextIndex >= fields.length) {
+            // 找到了要排除的属性，将其标记为排除
+            detailMatch.setExportFlag(false);
+            return;
+        }
+
+        doExcludeField(detailMatch.getChildList(), fields, index + 1);
+    }
 }
