@@ -17,6 +17,7 @@ public enum SysWebErrorCodeEnums implements IErrorCode {
     USER_NOT_EXISTS(1015010, "用户({0}) 不存在"),
     USER_OLD_PASSWORD_NOT_MATCH(1015023, "修改密码失败，旧密码不匹配"),
     FILE_NOT_EXISTS(1015024, "文件 ({0}) 不存在"),
+    SYSTEM_USER_USER_DISABLED(1015025, "用户已禁用，请联系管理员。"),
 
     ;
 

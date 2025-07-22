@@ -18,7 +18,7 @@ public class AuthenticationInterceptor extends AbstractAuthenticationInterceptor
     private final SysPermissionService permissionService;
 
     @Override
-    protected Object parseUserToken(String userToken) {
+    protected LoginUser parseUserToken(String userToken) {
         if (!StringUtils.hasText(userToken)) {
             return null;
         }
