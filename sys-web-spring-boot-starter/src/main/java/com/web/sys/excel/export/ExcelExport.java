@@ -42,6 +42,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -91,6 +92,9 @@ public class ExcelExport<T> {
 
     // 标题一共占用几行
     private int titleRowCount = 0;
+
+    // 每一列的列宽，0 表示未配置，使用初始化
+    private int[] columnWidthArrays;
 
     /**
      * 统计列表
@@ -220,7 +224,7 @@ public class ExcelExport<T> {
     }
 
     private Sheet obtainAvailableSheet() {
-        if (sheet != null && sheet.getLastRowNum() < sheetSize - titleRowCount) {
+        if (sheet != null && sheet.getLastRowNum() < sheetSize + titleRowCount - 1) {
             return sheet;
         }
 
@@ -229,8 +233,56 @@ public class ExcelExport<T> {
         wb.setSheetName(this.currentSheetNum - 1, "Sheet" + this.currentSheetNum);
 
         createSheetTitle();
+
+        initColumnWidth();
+
         titleRowCount = sheet.getLastRowNum() + 1;
         return sheet;
+    }
+
+    private void initColumnWidth() {
+        if (columnWidthArrays != null) {
+            return;
+        }
+
+        int lastRowNum = sheet.getLastRowNum();
+        Row row = sheet.getRow(lastRowNum);
+        short columnCount = row.getLastCellNum();
+        columnWidthArrays = new int[columnCount];
+        Arrays.fill(columnWidthArrays, 0);
+
+        initColumnWidth(fieldDetailList);
+
+        for (int i = 0; i < columnWidthArrays.length; i++) {
+            int width = columnWidthArrays[i];
+            if (width <= 0) {
+                width = 16;
+            }
+
+            sheet.setColumnWidth(i, width * 256);
+        }
+    }
+
+    private void initColumnWidth(List<FieldDetail> fieldDetailList) {
+        if (fieldDetailList == null || fieldDetailList.isEmpty()) {
+            return;
+        }
+
+        for (FieldDetail fieldDetail : fieldDetailList) {
+            boolean minParseUnit = fieldDetail.isMinParseUnit();
+            if (minParseUnit) {
+                Excel anno = fieldDetail.getAnno();
+                Integer colIndex = fieldDetail.getColIndex();
+                int width = anno.colWidth();
+                // 列宽取最大值
+                if (columnWidthArrays[colIndex] < width) {
+                    columnWidthArrays[colIndex] = width;
+                }
+            } else {
+                List<FieldDetail> childList = fieldDetail.getChildList();
+                initColumnWidth(childList);
+            }
+        }
     }
 
     protected void createSheetTitle() {
@@ -531,7 +583,8 @@ public class ExcelExport<T> {
             return;
         }
         if (details == null || details.isEmpty()) {
-            throw new RuntimeException("details is empty");
+            log.error("exclude field failed, details is empty");
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
         }
 
         SFunction<?, ?> field = fields[index];
@@ -547,7 +600,9 @@ public class ExcelExport<T> {
         }
 
         if (detailMatch == null) {
-            throw new RuntimeException("MISMATCH");
+            log.error("exclude field failed, field MISMATCH. class: {}, fieldName: {}",
+                    meta.getInstantiatedClass().getName(), fieldName);
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
         }
 
         // System.out.printf("fieldName: %s, className: %s%n", fieldName, detailMatch.getFieldClass());
