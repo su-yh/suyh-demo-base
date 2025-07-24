@@ -96,6 +96,8 @@ public class ExcelExport<T> {
     // 每一列的列宽，0 表示未配置，使用初始化
     private int[] columnWidthArrays;
 
+    private int maxColumnIndex = -1;
+
     /**
      * 统计列表
      */
@@ -245,10 +247,7 @@ public class ExcelExport<T> {
             return;
         }
 
-        int lastRowNum = sheet.getLastRowNum();
-        Row row = sheet.getRow(lastRowNum);
-        short columnCount = row.getLastCellNum();
-        columnWidthArrays = new int[columnCount];
+        columnWidthArrays = new int[maxColumnIndex + 1];
         Arrays.fill(columnWidthArrays, 0);
 
         initColumnWidth(fieldDetailList);
@@ -269,6 +268,9 @@ public class ExcelExport<T> {
         }
 
         for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
             boolean minParseUnit = fieldDetail.isMinParseUnit();
             if (minParseUnit) {
                 Excel anno = fieldDetail.getAnno();
@@ -561,6 +563,32 @@ public class ExcelExport<T> {
         }
 
         ExcelUtils.orderFieldList(this.fieldDetailList, 0);
+
+        maxColumnIndex = maxValidColumnIndex(this.fieldDetailList, -1);
+        if (maxColumnIndex < 0) {
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+        }
+    }
+
+    private int maxValidColumnIndex(List<FieldDetail> fieldDetailList, int maxIndex) {
+        if (fieldDetailList == null || fieldDetailList.isEmpty()) {
+            return maxIndex;
+        }
+
+        for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
+
+            if (fieldDetail.isMinParseUnit()) {
+                maxIndex = Math.max(maxIndex, fieldDetail.getColIndex());
+            } else {
+                List<FieldDetail> childList = fieldDetail.getChildList();
+                maxIndex = maxValidColumnIndex(childList, maxIndex);
+            }
+        }
+
+        return maxIndex;
     }
 
     /**
