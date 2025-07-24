@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"     column="update_by"    />
         <result property="updated"   column="updated"  />
         <result property="remark"       column="remark"       />
+        <result property="tokenId"       column="token_id"       />
         <association property="dept" javaType="com.web.ruoyi.mybatis.entity.SysDept" resultMap="deptResult" />
         <collection  property="roles"   javaType="java.util.List"  resultMap="RoleResult" />
     </resultMap>
@@ -50,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<sql id="selectUserVo">
         select u.id, u.dept_id, u.username, u.nickname, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status,
-               u.del_flag, u.login_ip, u.login_date, u.create_by, u.created, u.remark, u.salt, u.two_factor_auth_key,
+               u.del_flag, u.login_ip, u.login_date, u.create_by, u.created, u.remark, u.salt, u.two_factor_auth_key, u.token_id,
         d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.status as dept_status,
         r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
         from sys_user u
@@ -61,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectUserList" parameterType="com.web.ruoyi.mybatis.entity.SysUser" resultMap="SysUserResult">
 		select u.id, u.dept_id, u.nickname, u.username, u.email, u.avatar, u.phonenumber, u.sex, u.status, u.del_flag,
-		       u.login_ip, u.login_date, u.create_by, u.created, u.remark, u.salt, u.two_factor_auth_key,
+		       u.login_ip, u.login_date, u.create_by, u.created, u.remark, u.salt, u.two_factor_auth_key, u.token_id,
 		       d.dept_name, d.leader
 		from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
@@ -203,6 +204,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="loginDate != null">login_date = #{loginDate},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null">remark = #{remark},</if>
+			<if test="tokenId != null">token_id = #{tokenId},</if>
  			updated = sysdate()
  		</set>
  		where id = #{id}

@@ -1,10 +1,11 @@
 package com.web.sys.authentication.interceptor;
 
-import com.base.web.constants.enums.BaseWebErrorCodeEnums;
 import com.base.web.exception.ExceptionUtil;
 import com.base.web.util.TokenUtils;
+import com.web.ruoyi.mybatis.entity.SysUser;
 import com.web.ruoyi.service.SysPermissionService;
 import com.web.sys.authentication.user.LoginUser;
+import com.web.sys.constants.enums.SysWebErrorCodeEnums;
 import com.web.sys.service.IUserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +30,25 @@ public class AuthenticationInterceptor extends AbstractAuthenticationInterceptor
         }
 
         String username = claims.getSubject();
-        String strId = claims.getId();
-        String nickname = claims.get(LoginUser.NICK_NAME_KEY, String.class);
-        if (username == null || strId == null || nickname == null) {
-            log.error("claims value null, username: {}, id: {}, nickname: {}", username, strId, nickname);
-            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+        String tokenIdStr = claims.getId();
+        Long userId = claims.get(TokenUtils.USER_ID_KEY, Long.class);
+        if (username == null || userId == null || tokenIdStr == null) {
+            log.error("invalid token, claims value null, username: {}, userId: {}, tokenId: {}", username, userId, tokenIdStr);
+            throw ExceptionUtil.business(SysWebErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
         }
 
-        long id = Long.parseLong(strId);
-        return new LoginUser(userService, permissionService, id, username, nickname);
+        SysUser sysUser = userService.obtainUserById(userId);
+        if (sysUser == null) {
+            log.warn("parse user token, user not exists, by id: {}", userId);
+            throw ExceptionUtil.business(SysWebErrorCodeEnums.USER_NOT_EXISTS);
+        }
+
+        Integer tokenId = sysUser.getTokenId();
+        if (tokenId == null || tokenId < 0 || !tokenIdStr.equals(tokenId + "")) {
+            log.warn("tokenId(SysUser): {}, tokenId(JWT): {}", tokenId, tokenIdStr);
+            throw ExceptionUtil.business(SysWebErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
+        }
+
+        return new LoginUser(sysUser, permissionService);
     }
 }

@@ -42,8 +42,8 @@ public class UserController {
 
     @Operation(summary = "用户登出")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    @Permit(required = false)
-    public R<Boolean> logout() {
+    public R<Boolean> logout(@Parameter(hidden = true) @CurrLoginUser(required = false) LoginUser loginUser) {
+        userService.logout(loginUser);
         return R.ofSuccess();
     }
 

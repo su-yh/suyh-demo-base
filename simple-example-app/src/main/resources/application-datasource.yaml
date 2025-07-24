@@ -18,6 +18,7 @@ base:
         password: example_master
         flyway:
           enabled: true
+          out-of-order: true
           locations:
             - "sqls/mysql/sys/base"
             - "sqls/mysql/master"
@@ -27,6 +28,7 @@ base:
         password: example_slave
         flyway:
           enabled: true
+          out-of-order: true
           locations:
             - "sqls/mysql/slave"
 
