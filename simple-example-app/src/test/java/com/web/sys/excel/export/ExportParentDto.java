@@ -1,6 +1,5 @@
 package com.web.sys.excel.export;
 
-import com.web.ruoyi.excel.annotation.RuoyiExcel;
 import com.web.sys.excel.annotation.Excel;
 import lombok.Data;
 
@@ -11,6 +10,5 @@ import lombok.Data;
 @Data
 public class ExportParentDto extends ExportSuperDto {
     @Excel(sort = 2, name = "uuid")
-    @RuoyiExcel(sort = 2, name = "uuid")
     private String uuid;
 }

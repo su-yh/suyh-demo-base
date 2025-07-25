@@ -68,4 +68,16 @@ public class BaseHandlerExceptionResolver extends DefaultHandlerExceptionResolve
         response.sendError(HttpServletResponse.SC_OK, ex.getMessage());
         return new ModelAndView();
     }
+
+    @NonNull
+    @Override
+    protected String buildLogMessage(@NonNull Exception ex, @NonNull HttpServletRequest request) {
+        if (ex instanceof AbstractBusinessException) {
+            AbstractBusinessException businessException = (AbstractBusinessException) ex;
+            IErrorCode ec = businessException.getEc();
+            return String.format("Resolved [error code: %d, msg: %s]", ec.getCode(), ec.getMsg());
+        }
+
+        return super.buildLogMessage(ex, request);
+    }
 }

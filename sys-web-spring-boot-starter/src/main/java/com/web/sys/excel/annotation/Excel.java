@@ -39,6 +39,17 @@ public @interface Excel {
     IndexedColors headerColor() default IndexedColors.WHITE;
 
     /**
+     * 列宽，每个单元表示一个字符，即：若为1 则列为1 个字符宽度
+     * 0 表示使用默认
+     */
+    int colWidth() default 0;
+
+    /**
+     * 是否使用父元素的style 应用到标题头
+     */
+    boolean useParentHeaderStyle() default true;
+
+    /**
      * 自定义数据处理器
      */
     Class<? extends ExcelHandlerAdapter> handler() default ExcelHandlerAdapter.class;

@@ -1,8 +1,5 @@
 package com.web.sys.excel.export;
 
-import com.web.ruoyi.excel.annotation.RuoyiExcel;
-import com.web.ruoyi.excel.handler.BigDecimalRateHandler;
-import com.web.ruoyi.excel.handler.ExcelEnumValueHandler;
 import com.web.sys.excel.annotation.Excel;
 import com.web.sys.excel.args.HandlerArgsBigDecimal;
 import lombok.Data;
@@ -19,10 +16,8 @@ import java.util.List;
 @Data
 public class ExportDto extends ExportParentDto {
     @Excel(sort = 1, name = "dateTime")
-    @RuoyiExcel(sort = 1, name = "dateTime", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date dateTime = new Date();
     @Excel(sort = 3, name = "amount", argsJson = HandlerArgsBigDecimal.JSON_DECIMAL_FORMAT_FIXED_TWO)
-    @RuoyiExcel(sort = 3, name = "amount", handler = BigDecimalRateHandler.class)
     private BigDecimal amount;
     @Excel(sort = 3, name = "uuidList")
     private List<String> uuidList;
@@ -31,7 +26,6 @@ public class ExportDto extends ExportParentDto {
     @Excel(sort = 8, name = "rateList", argsJson = HandlerArgsBigDecimal.JSON_DECIMAL_FORMAT_PERCENTAGE)
     private List<BigDecimal> rateList;
     @Excel(sort = 9, name = "statusTest")
-    @RuoyiExcel(sort = 9, name = "statusTest", handler = ExcelEnumValueHandler.class)
     private TransferStatusTestEnums statusTest;
 
     @Excel(sort = 2, name = "detail", headerBackgroundColor = IndexedColors.SKY_BLUE, minParseUnit = false)

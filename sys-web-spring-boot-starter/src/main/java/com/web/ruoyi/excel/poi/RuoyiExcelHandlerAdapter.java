@@ -2,12 +2,13 @@ package com.web.ruoyi.excel.poi;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.context.MessageSource;
 
 import java.util.Locale;
 
 /**
  * Excel数据格式处理适配器
- * 
+ *
  * @author ruoyi
  */
 public interface RuoyiExcelHandlerAdapter
@@ -23,5 +24,5 @@ public interface RuoyiExcelHandlerAdapter
      *
      * @return 处理后的值
      */
-    Object format(Object value, Locale locale, String[] args, Cell cell, Workbook wb);
+    Object format(Object value, MessageSource messageSource, Locale locale, String[] args, Cell cell, Workbook wb);
 }

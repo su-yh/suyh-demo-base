@@ -6,7 +6,7 @@ import com.web.sys.authentication.annotation.Permit;
 import com.web.sys.authentication.user.LoginUser;
 import com.web.sys.dto.base.IdBody;
 import com.web.sys.dto.user.req.UserLoginReqDto;
-import com.web.sys.service.UserService;
+import com.web.sys.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Slf4j
 public class UserController {
-    private final UserService userService;
+    private final IUserService userService;
 
     @Operation(summary = "用户登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -42,8 +42,8 @@ public class UserController {
 
     @Operation(summary = "用户登出")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    @Permit(required = false)
-    public R<Boolean> logout() {
+    public R<Boolean> logout(@Parameter(hidden = true) @CurrLoginUser(required = false) LoginUser loginUser) {
+        userService.logout(loginUser);
         return R.ofSuccess();
     }
 

@@ -3,6 +3,7 @@ package com.web.sys.excel.handler.plus;
 import com.web.sys.excel.handler.ExcelHandlerAdapter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.context.MessageSource;
 
 import java.util.Locale;
 
@@ -12,7 +13,7 @@ import java.util.Locale;
  */
 public class ExcelCellHandlerLong implements ExcelHandlerAdapter {
     @Override
-    public void serializable(Workbook wb, Cell cell, Locale locale, Object cellObj, String argsJson) {
+    public void serializable(Workbook wb, Cell cell, MessageSource messageSource, Locale locale, Object cellObj, String argsJson) {
         if (cellObj == null) {
             return;
         }

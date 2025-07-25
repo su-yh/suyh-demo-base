@@ -2,7 +2,9 @@ package com.web.sys.authentication.interceptor;
 
 import com.base.web.constants.BaseWebConstants;
 import com.base.web.exception.ExceptionUtil;
+import com.web.ruoyi.constants.UserConstants;
 import com.web.sys.authentication.annotation.Permit;
+import com.web.sys.authentication.user.LoginUser;
 import com.web.sys.constants.enums.SysWebErrorCodeEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -80,20 +82,6 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
 
     // 认证
     protected void authentication(@NonNull HttpServletRequest request, @NonNull HandlerMethod handlerMethod) {
-        String userToken = getUserToken(request);
-        Object loginUser = parseUserToken(userToken);
-
-        // 正常登录
-        if (loginUser != null) {
-            request.setAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY, loginUser);
-            // UsernamePasswordAuthenticationToken authenticationToken
-            //         = new UsernamePasswordAuthenticationToken(loginUser, null, null);
-            // SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            return;
-        }
-
-        // 未登录的情况
-
         // 匹配无需认证路径
         String servletPath = request.getServletPath();
         for (String pattern : ignoreAuthPathPatterns) {
@@ -108,6 +96,21 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
             return;
         }
 
+        String userToken = getUserToken(request);
+        LoginUser loginUser = parseUserToken(userToken);
+
+        // 正常登录
+        if (loginUser != null) {
+            String status = loginUser.getUser().getStatus();
+            if (status == null || !status.trim().equals(UserConstants.NORMAL)) {
+                throw ExceptionUtil.business(SysWebErrorCodeEnums.SYSTEM_USER_USER_DISABLED);
+            }
+
+            request.setAttribute(BaseWebConstants.LOGIN_USER_ATTRIBUTE_KEY, loginUser);
+            return;
+        }
+
+        // 需要登录却未登录
         throw ExceptionUtil.business(SysWebErrorCodeEnums.TOKEN_ERROR_OR_EXPIRE);
     }
 
@@ -117,33 +120,5 @@ public abstract class AbstractAuthenticationInterceptor implements HandlerInterc
     }
 
     @Nullable
-    protected abstract Object parseUserToken(String userToken);
-
-//    @Nullable
-//    protected LOGIN_USER parseLoginUser(String userToken) {
-//        if (!StringUtils.hasText(userToken)) {
-//            return null;
-//        }
-//
-//        Claims claims = TokenUtils.parseToken(userToken);
-//        if (claims == null) {
-//            return null;
-//        }
-//
-//        String username = claims.getSubject();
-//        String strId = claims.getId();
-//        String nickname = claims.get(TokenUtils.NICK_NAME_KEY, String.class);
-//        if (username == null || strId == null || nickname == null) {
-//            log.error("claims value null, username: {}, id: {}, nickname: {}", username, strId, nickname);
-//            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
-//        }
-//
-//        if (userService == null) {
-//            log.error("{} bean is null", SysUserService.class.getSimpleName());
-//            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
-//        }
-//
-//        long id = Long.parseLong(strId);
-//        return new LoginUser(userService, permissionService, id, username, nickname);
-//    }
+    protected abstract LoginUser parseUserToken(String userToken);
 }

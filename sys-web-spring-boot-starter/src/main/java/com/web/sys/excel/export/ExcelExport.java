@@ -1,5 +1,8 @@
 package com.web.sys.excel.export;
 
+import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
+import com.baomidou.mybatisplus.core.toolkit.support.LambdaMeta;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.base.mp.mybatis.PageParam;
 import com.base.mp.mybatis.PageResult;
 import com.base.web.constants.enums.BaseWebErrorCodeEnums;
@@ -9,8 +12,10 @@ import com.web.sys.excel.annotation.Excel;
 import com.web.sys.excel.handler.ExcelHandlerAdapter;
 import com.web.sys.excel.util.ExcelUtils;
 import com.web.sys.excel.vo.FieldDetail;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -42,9 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Excel相关处理
@@ -84,10 +87,14 @@ public class ExcelExport<T> {
     /**
      * 注解列表（树型结构）：所有属性的字段以及对应的注解
      */
+    @Getter
     private List<FieldDetail> fieldDetailList;
 
     // 标题一共占用几行
     private int titleRowCount = 0;
+
+    // 每一列的列宽，0 表示未配置，使用初始化
+    private int[] columnWidthArrays;
 
     /**
      * 统计列表
@@ -99,10 +106,7 @@ public class ExcelExport<T> {
      */
     private final Class<T> clazz;
 
-    /**
-     * 需要排除列属性
-     */
-    private String[] excludeFields;
+    private final List<SFunction<?, ?>[]> exclude = new ArrayList<>();
 
     private final Locale locale;
 
@@ -220,7 +224,7 @@ public class ExcelExport<T> {
     }
 
     private Sheet obtainAvailableSheet() {
-        if (sheet != null && sheet.getLastRowNum() < sheetSize - titleRowCount) {
+        if (sheet != null && sheet.getLastRowNum() < sheetSize + titleRowCount - 1) {
             return sheet;
         }
 
@@ -229,8 +233,56 @@ public class ExcelExport<T> {
         wb.setSheetName(this.currentSheetNum - 1, "Sheet" + this.currentSheetNum);
 
         createSheetTitle();
+
+        initColumnWidth();
+
         titleRowCount = sheet.getLastRowNum() + 1;
         return sheet;
+    }
+
+    private void initColumnWidth() {
+        if (columnWidthArrays != null) {
+            return;
+        }
+
+        int lastRowNum = sheet.getLastRowNum();
+        Row row = sheet.getRow(lastRowNum);
+        short columnCount = row.getLastCellNum();
+        columnWidthArrays = new int[columnCount];
+        Arrays.fill(columnWidthArrays, 0);
+
+        initColumnWidth(fieldDetailList);
+
+        for (int i = 0; i < columnWidthArrays.length; i++) {
+            int width = columnWidthArrays[i];
+            if (width <= 0) {
+                width = 16;
+            }
+
+            sheet.setColumnWidth(i, width * 256);
+        }
+    }
+
+    private void initColumnWidth(List<FieldDetail> fieldDetailList) {
+        if (fieldDetailList == null || fieldDetailList.isEmpty()) {
+            return;
+        }
+
+        for (FieldDetail fieldDetail : fieldDetailList) {
+            boolean minParseUnit = fieldDetail.isMinParseUnit();
+            if (minParseUnit) {
+                Excel anno = fieldDetail.getAnno();
+                Integer colIndex = fieldDetail.getColIndex();
+                int width = anno.colWidth();
+                // 列宽取最大值
+                if (columnWidthArrays[colIndex] < width) {
+                    columnWidthArrays[colIndex] = width;
+                }
+            } else {
+                List<FieldDetail> childList = fieldDetail.getChildList();
+                initColumnWidth(childList);
+            }
+        }
     }
 
     protected void createSheetTitle() {
@@ -256,6 +308,9 @@ public class ExcelExport<T> {
         List<Cell> mergeList = new ArrayList<>();
         boolean multiRowFlag = false;
         for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
             Excel anno = fieldDetail.getAnno();
 
             Cell rowTitleCell = row.createCell(colNum);
@@ -266,13 +321,15 @@ public class ExcelExport<T> {
             rowTitleCell.setCellValue(title);
 
             CellStyle titleStyle = createTitleCellStyle(anno);
-            if (parentTitleStyle != null) {
-                // 使用父元素相同的背景色与文字颜色
+            if (parentTitleStyle != null && anno.useParentHeaderStyle()) { // 使用父元素相同的背景色与文字颜色
+                // 父元素
                 Font parentFont = wb.getFontAt(parentTitleStyle.getFontIndexAsInt());
 
+                // 字体
                 Font curFont = wb.getFontAt(titleStyle.getFontIndexAsInt());
                 curFont.setColor(parentFont.getColor());
 
+                // 背景色
                 titleStyle.setFillForegroundColor(parentTitleStyle.getFillForegroundColor());
             }
 
@@ -371,6 +428,9 @@ public class ExcelExport<T> {
 
         int rowCount = 1;
         for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
             Field field = fieldDetail.getField();
 
             field.setAccessible(true);
@@ -442,7 +502,7 @@ public class ExcelExport<T> {
             CellStyle cellStyle = obtainDataCellStyle();
             Cell cell = childRow.createCell(fieldDetail.getColIndex());
             cell.setCellStyle(cellStyle);
-            adapterInstance.serializable(wb, cell, locale, element, excelAnn.argsJson());
+            adapterInstance.serializable(wb, cell, MESSAGE_SOURCE, locale, element, excelAnn.argsJson());
 
             if (mergeCellList != null) {
                 mergeCellList.add(cell);
@@ -490,23 +550,70 @@ public class ExcelExport<T> {
     }
 
     private void initFieldDetail() {
+        if (fieldDetailList != null) {
+            return;
+        }
+
         this.fieldDetailList = ExcelUtils.parseFieldDetail(clazz);
-        // 如果有需要排除的字段
-        if (excludeFields != null && excludeFields.length > 0) {
-            Set<String> excludeSet = Arrays.stream(excludeFields).collect(Collectors.toSet());
-            // 过滤掉需要排除的字段
-            fieldDetailList = this.fieldDetailList.stream()
-                    .filter(fd -> !excludeSet.contains(fd.getField().getName()))
-                    .collect(Collectors.toList());
+
+        for (SFunction<?, ?>[] sf : exclude) {
+            doExcludeField(this.fieldDetailList, sf, 0);
         }
 
         ExcelUtils.orderFieldList(this.fieldDetailList, 0);
     }
 
-
-    public final void setExcludeFields(String... fieldGetters) {
-        this.excludeFields = fieldGetters;
+    /**
+     * 一次添加一个要导出的字段，从第一层开始，如果有多层，则一个一个往下写。
+     * <pre><code>
+     * excelExport.addExcludeField(
+     *         (SFunction<ExportDto, ?>) ExportDto::getDetail,
+     *         (SFunction<ExportDetailDto, ?>) ExportDetailDto::getDetailDto02,
+     *         (SFunction<ExportDetailDto02, ?>) ExportDetailDto02::getDto03,
+     *         (SFunction<ExportDetailDto03, ?>) ExportDetailDto03::getExportField
+     * );
+     * </code></pre>
+     */
+    public void addExcludeField(SFunction<?, ?>... fields) {
+        exclude.add(fields);
     }
 
+    private void doExcludeField(List<FieldDetail> details, SFunction<?, ?>[] fields, int index) {
+        if (fields == null || fields.length == 0) {
+            return;
+        }
+        if (details == null || details.isEmpty()) {
+            log.error("exclude field failed, details is empty");
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+        }
 
+        SFunction<?, ?> field = fields[index];
+        LambdaMeta meta = LambdaUtils.extract(field);
+        String fieldName = PropertyNamer.methodToProperty(meta.getImplMethodName());
+
+        FieldDetail detailMatch = null;
+        for (FieldDetail detail : details) {
+            if (detail.getField().getName().equals(fieldName)) {
+                detailMatch = detail;
+                break;
+            }
+        }
+
+        if (detailMatch == null) {
+            log.error("exclude field failed, field MISMATCH. class: {}, fieldName: {}",
+                    meta.getInstantiatedClass().getName(), fieldName);
+            throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+        }
+
+        // System.out.printf("fieldName: %s, className: %s%n", fieldName, detailMatch.getFieldClass());
+
+        int nextIndex = index + 1;
+        if (nextIndex >= fields.length) {
+            // 找到了要排除的属性，将其标记为排除
+            detailMatch.setExportFlag(false);
+            return;
+        }
+
+        doExcludeField(detailMatch.getChildList(), fields, index + 1);
+    }
 }

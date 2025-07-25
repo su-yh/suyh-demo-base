@@ -8,13 +8,9 @@ import lombok.Getter;
  */
 @Getter
 public abstract class AbstractLoginUser {
-    protected final Long id;
-    protected final String username;
-    protected final String nickname;
+    public abstract Long getId();
 
-    public AbstractLoginUser(Long id, String username, String nickname) {
-        this.id = id;
-        this.username = username;
-        this.nickname = nickname;
-    }
+    public abstract String getNickname();
+
+    public abstract String getUsername();
 }

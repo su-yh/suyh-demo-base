@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * 用户对象 sys_user
- * 
+ *
  * @author ruoyi
  */
 public class SysUser implements Serializable {
@@ -120,6 +120,11 @@ public class SysUser implements Serializable {
 
     /** 最后登录IP */
     private String loginIp;
+
+    @Getter
+    @Setter
+    @JsonIgnore
+    private Integer tokenId;
 
     /** 最后登录时间 */
     private Date loginDate;

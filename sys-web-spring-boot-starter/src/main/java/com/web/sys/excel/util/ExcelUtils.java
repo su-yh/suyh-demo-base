@@ -161,6 +161,9 @@ public class ExcelUtils {
 
         int nextCol = col;
         for (FieldDetail fieldDetail : fieldDetailList) {
+            if (!fieldDetail.isExportFlag()) {
+                continue;
+            }
             // 在排序表头的时候直接确定好字段所在列，在进行数据处理的时候就会更方便。
             fieldDetail.setColIndex(nextCol);
 
