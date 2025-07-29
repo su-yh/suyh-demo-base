@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * 用户对象 sys_user
- *
+ * 
  * @author ruoyi
  */
 public class SysUser implements Serializable {

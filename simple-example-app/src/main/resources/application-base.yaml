@@ -5,3 +5,16 @@ sys:
 
 
 
+---
+spring:
+  config:
+    activate:
+      on-profile: "suyh"
+
+sys:
+  web:
+    user:
+      captcha:
+        two-factor-auth-enabled: false
+
+
