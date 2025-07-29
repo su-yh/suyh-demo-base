@@ -19,7 +19,7 @@
         <module>base-dynamic-datasource-spring-boot-starter</module>
         <module>base-mybatis-plus-spring-boot-starter</module>
         <module>base-web-spring-boot-starter</module>
-        <module>simple-example-app</module>
+        <!--        <module>simple-example-app</module>-->
         <module>sys-web-spring-boot-starter</module>
     </modules>
 
