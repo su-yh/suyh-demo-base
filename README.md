@@ -168,7 +168,7 @@
         }
     ```
 
-11. 跳过认证
+11. 忽略认证
 
     1. 默认情况下，有几种接口是不需要认证的，参考：`AbstractAuthenticationInterceptor#ignoreAuthPathPatterns`
     2. 对于controller 方法，使用注解 `@Permit(required = false)` 即可。
@@ -187,9 +187,10 @@
 
 13. excel 导入导出
 
-14. 参考：`RuoyiExcelUtil`
+    - 导入（`RuoyiExcelUtil`）
+    - 导出（`ExcelExport`）
 
-15. 菜单历史记录
+14. 菜单历史记录
 
     首个版本见：`sys-menu-v0.0.0.txt`
 
