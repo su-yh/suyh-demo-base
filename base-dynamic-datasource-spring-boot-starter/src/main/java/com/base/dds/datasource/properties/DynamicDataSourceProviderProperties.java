@@ -26,7 +26,6 @@ import java.util.Map;
 public class DynamicDataSourceProviderProperties implements DynamicDataSourceProvider, InitializingBean {
     public static final String PREFIX = "base.datasource";
 
-    @NestedConfigurationProperty
     @Valid
     private final Map<String, HikariDataSourcePlus> hikari = new HashMap<>();
 
