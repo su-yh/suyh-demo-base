@@ -12,6 +12,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.Set;
  * 这个是处理统一的返回值的，将所有的返回值都封装到一个公共的模板({@link R})中，
  * 这样在Controller 的接口中可以直接返回实际的返回值对象，在不需要有返回值的情况也可以直接添加void 作为返回值。
  */
+@ControllerAdvice
 @RequiredArgsConstructor
 public class WrapperResponseBodyAdvice implements ResponseBodyAdvice<Object> {
     private static final Set<String> BASE_PACKAGES = new HashSet<>();
