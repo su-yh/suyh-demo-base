@@ -9,7 +9,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer;
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import javax.sql.DataSource;
 import javax.validation.Valid;
@@ -42,7 +41,7 @@ public class DynamicDataSourceProviderProperties implements DynamicDataSourcePro
         }
     }
 
-    private void doFlyway(HikariDataSourcePlus ds) throws Exception {
+    public static void doFlyway(HikariDataSourcePlus ds) throws Exception {
         FlywayProperties flywayProperties = ds.getFlyway();
         if (!flywayProperties.isEnabled()) {
             return;
