@@ -43,7 +43,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -99,16 +98,13 @@ public class ExcelExport<T> {
     private int maxColumnIndex = -1;
 
     /**
-     * 统计列表
-     */
-    private final Map<Integer, Double> statistics = new HashMap<>();
-
-    /**
      * 实体对象
      */
     private final Class<T> clazz;
 
+    @Deprecated
     private final List<SFunction<?, ?>[]> exclude = new ArrayList<>();
+    private final List<SFunction<?, ?>[]> excludePlus = new ArrayList<>();
 
     private final Locale locale;
 
@@ -195,7 +191,7 @@ public class ExcelExport<T> {
         PageParam pageParam = new PageParam();
         pageParam.setPageSize(pageSize);
         int total = 0;
-        int currentSize = 0;
+        int totalPage = 0;
 
         do {
             PageResult<T> pageResult = pageQuery.apply(pageParam);
@@ -203,24 +199,23 @@ public class ExcelExport<T> {
             if (pageParam.isSearchCount()) {
                 // 只有查询了总数的那一次的总数值才是可信的。
                 total = pageResult.getTotal().intValue();
+                totalPage = total / pageSize + (total % pageSize > 0 ? 1 : 0);
                 pageParam.setSearchCount(false); // 总数，只查一次
             }
 
             List<T> entityList = pageResult.getList();
-            int size = entityList != null ? entityList.size() : 0;
-            currentSize += size;
 
-            BigDecimal percentage = total > 0
-                    ? BigDecimal.valueOf(currentSize).divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_DOWN)
+            BigDecimal percentage = totalPage > 0
+                    ? BigDecimal.valueOf(pageParam.getPageNo()).divide(BigDecimal.valueOf(totalPage), 4, RoundingMode.HALF_DOWN)
                     : BigDecimal.ZERO;
-            log.info("excel page export, current page num: {}, page size: {}, size: {}/{}({})",
-                    pageParam.getPageNo(), pageParam.getPageSize(), currentSize, total, new DecimalFormat("0.00%").format(percentage));
+            log.info("excel page export, page size: {}, current page num: {}, page: {}/{}({})",
+                    pageParam.getPageSize(), pageParam.getPageNo(), pageParam.getPageNo(), totalPage, new DecimalFormat("0.00%").format(percentage));
 
             this.writeExcelData(entityList);
 
             Integer pageNo = pageParam.getPageNo();
             pageParam.setPageNo(pageNo + 1);    // 下一页
-        } while (currentSize < total);
+        } while (pageParam.getPageNo() <= totalPage);
 
         log.info("excel page export finished, total size: {}", total);
     }
@@ -562,6 +557,8 @@ public class ExcelExport<T> {
             doExcludeField(this.fieldDetailList, sf, 0);
         }
 
+        fieldExcludePlus();
+
         ExcelUtils.orderFieldList(this.fieldDetailList, 0);
 
         maxColumnIndex = maxValidColumnIndex(this.fieldDetailList, -1);
@@ -592,7 +589,7 @@ public class ExcelExport<T> {
     }
 
     /**
-     * 一次添加一个要导出的字段，从第一层开始，如果有多层，则一个一个往下写。
+     * 一次添加一个要排除导出的字段，从第一层开始，如果有多层，则一个一个往下写。
      * <pre><code>
      * excelExport.addExcludeField(
      *         (SFunction<ExportDto, ?>) ExportDto::getDetail,
@@ -602,10 +599,77 @@ public class ExcelExport<T> {
      * );
      * </code></pre>
      */
+    @Deprecated
     public void addExcludeField(SFunction<?, ?>... fields) {
         exclude.add(fields);
     }
 
+    /**
+     * 一次添加一个要排除导出的字段，从第一层开始，如果有多层，则一个一个往下写。
+     * <pre><code>
+     * excelExport.addExcludeField(
+     *         (SFunction<ExportDto, ?>) ExportDto::getDetail,
+     *         (SFunction<ExportDetailDto, ?>) ExportDetailDto::getDetailDto02,
+     *         (SFunction<ExportDetailDto02, ?>) ExportDetailDto02::getDto03,
+     *         (SFunction<ExportDetailDto03, ?>) ExportDetailDto03::getExportField
+     * );
+     * </code></pre>
+     */
+    public void addExcludeFieldPlus(SFunction<?, ?>... fields) {
+        excludePlus.add(fields);
+    }
+
+    private void fieldExcludePlus() {
+        for (SFunction<?, ?>[] sfs : excludePlus) {
+            fieldExcludePlus(this.fieldDetailList, sfs, 0);
+        }
+    }
+
+    private void fieldExcludePlus(List<FieldDetail> fieldDetailList, SFunction<?, ?>[] sfs, int curDeepNum) {
+        // 只需要最后一层匹配就行了，前面的都是路径，最后一层才是目标。
+        int targetDeepNum = sfs.length - 1;
+        if (targetDeepNum < curDeepNum) {
+            return;
+        }
+
+        if (targetDeepNum == curDeepNum) {
+            SFunction<?, ?> sf = sfs[targetDeepNum];
+            LambdaMeta meta = LambdaUtils.extract(sf);
+            String fieldName = PropertyNamer.methodToProperty(meta.getImplMethodName());
+
+            FieldDetail detailMatch = null;
+            for (FieldDetail detail : fieldDetailList) {
+                if (detail.getField().getName().equals(fieldName)) {
+                    detailMatch = detail;
+                    break;
+                }
+            }
+
+            if (detailMatch == null) {
+                log.error("exclude field failed, field MISMATCH. class: {}, fieldName: {}",
+                        meta.getInstantiatedClass().getName(), fieldName);
+                throw ExceptionUtil.business(BaseWebErrorCodeEnums.SERVICE_ERROR);
+            }
+            detailMatch.setExportFlag(false);
+        } else {
+            SFunction<?, ?> sf = sfs[curDeepNum];
+            LambdaMeta meta = LambdaUtils.extract(sf);
+            String fieldName = PropertyNamer.methodToProperty(meta.getImplMethodName());
+
+            for (FieldDetail fieldDetail : fieldDetailList) {
+                if (!fieldDetail.isMinParseUnit()) {
+                    // 找到父级并且匹配，则进入下一级递归
+                    if (fieldDetail.getField().getName().equals(fieldName)) {
+                        List<FieldDetail> childList = fieldDetail.getChildList();
+                        fieldExcludePlus(childList, sfs, curDeepNum + 1);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    @Deprecated
     private void doExcludeField(List<FieldDetail> details, SFunction<?, ?>[] fields, int index) {
         if (fields == null || fields.length == 0) {
             return;

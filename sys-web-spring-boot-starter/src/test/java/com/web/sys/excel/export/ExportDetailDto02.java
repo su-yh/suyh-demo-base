@@ -1,0 +1,10 @@
+package com.web.sys.excel.export;
+
+import com.ebusiness.rouyi.excel.annotation.Excel;
+import lombok.Data;
+
+@Data
+public class ExportDetailDto02 {
+    @Excel(sort = 3, name = "dto03", minParseUnit = false, colWidth = 100)
+    private ExportDetailDto03 dto03;
+}
