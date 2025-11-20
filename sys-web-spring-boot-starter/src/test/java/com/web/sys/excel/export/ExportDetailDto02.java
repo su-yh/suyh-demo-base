@@ -1,6 +1,6 @@
 package com.web.sys.excel.export;
 
-import com.ebusiness.rouyi.excel.annotation.Excel;
+import com.web.sys.excel.annotation.Excel;
 import lombok.Data;
 
 @Data
