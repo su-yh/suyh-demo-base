@@ -100,7 +100,7 @@ public class ExcelUtils {
                     }
                     adapterInstance = HANDLER_ADAPTER_MAP.get(mapKey);
                     if (adapterInstance == null) {
-                        log.warn("field handler not found, Class: {}, use default", fieldClass.getSimpleName());
+                        log.debug("field handler not found, Class: {}, use default", fieldClass.getSimpleName());
                         adapterInstance = ExcelCellHandlerDefault.instance;
                     }
                 } else {
