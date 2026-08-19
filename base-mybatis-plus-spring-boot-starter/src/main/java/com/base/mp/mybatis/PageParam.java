@@ -61,8 +61,6 @@ public class PageParam implements Serializable {
     }
 
     public <T> Page<T> toPage() {
-        Page<T> page = new Page<>(getPageNo(), getPageSize());
-        page.setSearchCount(searchCount);
-        return page;
+        return MyBatisUtils.buildPage(this);
     }
 }
