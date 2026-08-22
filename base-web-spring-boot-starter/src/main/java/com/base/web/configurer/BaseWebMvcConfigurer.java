@@ -1,6 +1,8 @@
 package com.base.web.configurer;
 
+import com.base.web.advice.date.DateTimeFormatPlusFormatterFactory;
 import com.base.web.error.BaseHandlerExceptionResolver;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,5 +26,11 @@ public class BaseWebMvcConfigurer implements WebMvcConfigurer {
         }
 
         resolvers.add(new BaseHandlerExceptionResolver());
+    }
+
+    @Override
+    public void addFormatters(@NonNull FormatterRegistry registry) {
+        // 注册 DateTimeFormatPlus
+        registry.addFormatterForFieldAnnotation(new DateTimeFormatPlusFormatterFactory());
     }
 }
