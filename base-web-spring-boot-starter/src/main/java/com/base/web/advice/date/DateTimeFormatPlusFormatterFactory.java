@@ -6,45 +6,48 @@ import org.springframework.format.Parser;
 import org.springframework.format.Printer;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.datetime.DateFormatter;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
 /**
+ * 增强日期解析工厂：{@link DateTimeFormatPlus}
+ * 复刻原生DateTimeFormat全部解析能力，并支持时间偏移 offset + unit
+ * 仅支持 java.util.Date；仅用于请求参数解析(RequestParam/ModelAttribute)，不支持@RequestBody
  * @author suyh
  * @since 2026-08-22
  */
 public class DateTimeFormatPlusFormatterFactory implements AnnotationFormatterFactory<DateTimeFormatPlus> {
 
     @Override
+    @NonNull
     public Set<Class<?>> getFieldTypes() {
-        // 仅支持 java.util.Date
-        return Set.of(Date.class);
+        return Collections.singleton(Date.class);
     }
 
     @Override
-    public Printer<?> getPrinter(DateTimeFormatPlus annotation, Class<?> fieldType) {
-        // 只做入参解析，不做格式化输出
+    @NonNull
+    public Printer<?> getPrinter(@NonNull DateTimeFormatPlus annotation, @NonNull Class<?> fieldType) {
+        // 只做入参解析，不做输出格式化
         return null;
     }
 
     @Override
-    public Parser<?> getParser(DateTimeFormatPlus anno, Class<?> fieldType) {
+    @NonNull
+    public Parser<?> getParser(@NonNull DateTimeFormatPlus anno, @NonNull Class<?> fieldType) {
         final int offsetAmount = anno.offset();
         final OffsetUnit unit = anno.unit();
 
-        return (String text, Locale locale) -> {
-            if (text == null || text.isBlank()) {
-                return null;
-            }
-            // 获取当前请求上下文时区
+        return (@NonNull String text, @NonNull Locale locale) -> {
             TimeZone timeZone = LocaleContextHolder.getTimeZone();
 
             DateFormatter dateFormatter = new DateFormatter();
-            if (!anno.pattern().isBlank()) {
+            if (StringUtils.hasText(anno.pattern())) {
                 dateFormatter.setPattern(anno.pattern());
             }
             if (anno.iso() != DateTimeFormat.ISO.NONE) {
@@ -62,3 +65,4 @@ public class DateTimeFormatPlusFormatterFactory implements AnnotationFormatterFa
         };
     }
 }
+
