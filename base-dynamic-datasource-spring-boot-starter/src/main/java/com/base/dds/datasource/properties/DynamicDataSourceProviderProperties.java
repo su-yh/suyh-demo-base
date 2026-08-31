@@ -1,6 +1,7 @@
 package com.base.dds.datasource.properties;
 
 import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.base.dds.datasource.hikari.HikariDataSourcePlus;
 import lombok.Data;
 import org.flywaydb.core.Flyway;
@@ -20,10 +21,9 @@ import java.util.Map;
  * @author suyh
  * @since 2024-03-20
  */
-@ConfigurationProperties(prefix = DynamicDataSourceProviderProperties.PREFIX)
+@ConfigurationProperties(prefix = DynamicDataSourceProperties.PREFIX)
 @Data
 public class DynamicDataSourceProviderProperties implements DynamicDataSourceProvider, InitializingBean {
-    public static final String PREFIX = "base.datasource";
 
     @Valid
     private final Map<String, HikariDataSourcePlus> hikari = new HashMap<>();
